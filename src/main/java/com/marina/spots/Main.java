@@ -42,8 +42,13 @@ public class Main {
         ArrayList<Peak> peaks = spot.getSpots(5);
         for(Peak peak : peaks)
         {
+            // search
             algorithm.dfs(peaks, peak, new Peak(10, 15));
+            // set isVisited to false
+            peak.clear(peaks);
+
         }
+
     }
 
 
