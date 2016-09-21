@@ -46,16 +46,17 @@ public class Peak {
         }
     }
 
-
-    public boolean isNeighbour(Peak peak) {
-        if ((peak.getX() - 1 == this.getX() && peak.getY() == this.getY())
-                || (peak.getX() + 1 == this.getX() && peak.getY() == this.getY())
-                || (peak.getY() - 1 == this.getY() && peak.getX() == this.getX())
-                || (peak.getY() + 1 == this.getY() && peak.getX() == this.getX())
-                || (peak.getX() + 1 == this.getX() && peak.getY() + 1 == this.getY())
-                || (peak.getX() + 1 == this.getX() && peak.getY() - 1 == this.getY())
+    public boolean isNeighbour(Peak peak)
+    {
+        if (peak.getX() - 1 == this.getX() && peak.getY() == this.getY()
+                || peak.getX() + 1 == this.getX() && peak.getY() == this.getY()
+                || peak.getY() - 1 == this.getY() && peak.getX() == this.getX()
+                || peak.getY() + 1 == this.getY() && peak.getX() == this.getX()
+                || peak.getX() + 1 == this.getX() && peak.getY() + 1 == this.getY()
+                || peak.getX() + 1 == this.getX() && peak.getY() - 1 == this.getY()
                 || peak.getX() - 1 == this.getX() && peak.getY() + 1 == this.getY()
-                || peak.getX() - 1 == this.getX() && peak.getY() - 1 == this.getY()) {
+                || peak.getX() - 1 == this.getX() && peak.getY() - 1 == this.getY())
+        {
             return true;
         }
         return false;
