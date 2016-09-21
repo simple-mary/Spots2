@@ -8,7 +8,7 @@ import org.json.JSONObject;
 public class GameField {
 
     private int fieldSize;
-    private static int[][] fieldPoints;
+    public static int[][] fieldPoints;
     public int getFieldSize() {
         return fieldSize;
     }

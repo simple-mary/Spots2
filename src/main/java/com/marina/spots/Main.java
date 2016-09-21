@@ -8,6 +8,7 @@ import org.json.JSONObject;
 public class Main {
 
     private static final GameField field = new GameField(30);
+    private static final Spot spot = new Spot();
 
     public static JSONObject generateJsonObject(String x, String y, String user)
     {
@@ -26,6 +27,7 @@ public class Main {
         field.setSpot(generateJsonObject("6","10","7"));
         field.setSpot(generateJsonObject("6","12","5"));
         field.getAllSpotsFromField();
+        spot.getSpots(5);
     }
 
 
