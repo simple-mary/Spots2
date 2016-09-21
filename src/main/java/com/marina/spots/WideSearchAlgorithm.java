@@ -34,9 +34,27 @@ public class WideSearchAlgorithm {
             for (int i = 0; i < 4; ++i)
             {
 
-            }
-//
 
+            }
         }
     }
+
+    public void getQueue(ArrayList<Peak> peaks, Peak goal)
+    {
+        Queue queue = new LinkedList();
+        int x = goal.getX();
+        int y = goal.getY();
+        for (Peak peak:peaks)
+        {
+            if (peak.getX() == goal.getX() || peak.getY() == goal.getY() || peak.getX()- 1 == goal.getX()
+                    || peak.getX() + 1 == goal.getX() || peak.getY()+1 == goal.getY() || peak.getY()-1 == goal.getY())
+            {
+                queue.add(peak);
+//                getQueue(peaks.remove(peak), peak); // need to think how to remove
+            }
+
+        }
+
+    }
+
 }
