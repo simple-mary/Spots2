@@ -48,7 +48,7 @@ public class WideSearchAlgorithm {
             System.out.println("Peak is already visited coordinate X: " + peak.getX() + " and Y: " + peak.getY());
             return;
         }
-        if(peak.equals(goalPeak))
+        if(peak.isVisited() && peak.equals(goalPeak))
         {
             System.out.println("Goal peak was found");
             System.out.println(queue.toString());
