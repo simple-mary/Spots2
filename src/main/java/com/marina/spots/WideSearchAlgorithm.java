@@ -12,16 +12,11 @@ import java.util.Queue;
  */
 public class WideSearchAlgorithm {
 
-    java.util.Queue queue = new LinkedList<Peak>();
+    final Queue queue = new LinkedList<Peak>();
 
     public java.util.Queue getQueue() {
         return queue;
     }
-
-    public void setQueue(java.util.Queue queue) {
-        this.queue = queue;
-    }
-
 
     public ArrayList<Peak> getAllNeighbours(ArrayList<Peak> peaks, Peak currentPeak)
     {
@@ -36,12 +31,12 @@ public class WideSearchAlgorithm {
         return list;
     }
 
-    public void dfs(ArrayList<Peak> peaksOfUser, Peak peak, Peak goalPeak)
+    public boolean dfs(ArrayList<Peak> peaksOfUser, Peak peak, Peak goalPeak)
     {
         if(peak.isVisited() && peak.equals(goalPeak))
         {
             System.out.println("Goal peak was found");
-            return;
+            return true;
         }
         if(peak.isVisited())
         {
@@ -61,13 +56,8 @@ public class WideSearchAlgorithm {
         if(peak.isNeighbour(goalPeak))
         {
             System.out.println("!!!!We have find chain!!! " + getQueue().toString());
-            return;
+            return true;
         }
+        return false;
     }
-
-    public void clearAll(ArrayList<Peak> peaks, Peak peak) {
-        getQueue().clear();
-        peak.clear(peaks);
-    }
-
 }

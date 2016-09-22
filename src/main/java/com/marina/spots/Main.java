@@ -13,7 +13,6 @@ public class Main {
 
     private static final GameField field = new GameField(30);
     private static final Spot spot = new Spot();
-    private static final WideSearchAlgorithm algorithm = new WideSearchAlgorithm();
     private static HashSet<Queue<Peak>> queues = new HashSet<java.util.Queue<Peak>>();
 
     public static JSONObject generateJsonObject(String x, String y, String user) {
@@ -69,11 +68,13 @@ public class Main {
         for (Peak peak : peaks) {
             System.out.println("Begin search from peak with X: "
                     + peak.getX() + " and Y :" + peak.getY());
-            // search
-            algorithm.clearAll(peaks, peak);
-            algorithm.dfs(peaks, peak, peak);
-            queues.add(algorithm.getQueue());
+            peak.clear(peaks);
+            WideSearchAlgorithm algorithm = new WideSearchAlgorithm();
+            if(algorithm.dfs(peaks, peak, peak)) {
+                queues.add(algorithm.getQueue());
+            }
         }
+        queues.toString();
     }
 }
 
