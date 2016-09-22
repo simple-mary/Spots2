@@ -15,6 +15,17 @@ public class WideSearchAlgorithm {
 
     final static Chain chain = new Chain();
 
+    java.util.Queue queue = new LinkedList<Peak>();
+
+    public java.util.Queue getQueue() {
+        return queue;
+    }
+
+    public void setQueue(java.util.Queue queue) {
+        this.queue = queue;
+    }
+
+
     public ArrayList<Peak> getAllNeighbours(ArrayList<Peak> peaks, Peak currentPeak)
     {
         ArrayList<Peak> list = new ArrayList<Peak>();
@@ -33,7 +44,6 @@ public class WideSearchAlgorithm {
         if(peak.isVisited() && peak.equals(goalPeak))
         {
             System.out.println("Goal peak was found");
-            chain.getQueues().add(chain.getQueue());
             return;
         }
         if(peak.isVisited())
@@ -42,7 +52,7 @@ public class WideSearchAlgorithm {
         }
 
         peak.setVisited(true);
-        chain.getQueue().add(peak);
+        getQueue().add(peak);
         System.out.println(peak.toString());
         ArrayList<Peak> neighbours = this.getAllNeighbours(peaksOfUser, peak);
 
@@ -54,13 +64,12 @@ public class WideSearchAlgorithm {
         if(peak.isNeighbour(goalPeak))
         {
             System.out.println("!!!!We have find chain!!! " + chain.getQueue().toString());
-            chain.getQueues().add(chain.getQueue());
             return;
         }
     }
 
     public void clearAll(ArrayList<Peak> peaks, Peak peak) {
-        chain.getQueue().clear();
+        getQueue().clear();
         peak.clear(peaks);
     }
 
