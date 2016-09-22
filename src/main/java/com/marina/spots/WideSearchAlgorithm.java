@@ -15,20 +15,6 @@ public class WideSearchAlgorithm {
 
     final static Chain chain = new Chain();
 
-    public void getQueue(ArrayList<Peak> peaks, Peak goal) {
-        Queue queue = new LinkedList();
-        int x = goal.getX();
-        int y = goal.getY();
-        for (Peak peak : peaks) {
-            if (peak.getX() - 1 == goal.getX()
-                    || peak.getX() + 1 == goal.getX()
-                    || peak.getY() + 1 == goal.getY()
-                    || peak.getY() - 1 == goal.getY()) {
-                queue.add(peak);
-            }
-        }
-    }
-
     public ArrayList<Peak> getAllNeighbours(ArrayList<Peak> peaks, Peak currentPeak)
     {
         ArrayList<Peak> list = new ArrayList<Peak>();
