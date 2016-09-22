@@ -25,8 +25,6 @@ public class Chain {
         this.queues = queues;
     }
 
-
-
     public HashSet<java.util.Queue<Peak>> getQueues() {
         return queues;
     }

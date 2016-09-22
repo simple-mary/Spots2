@@ -6,6 +6,12 @@ import java.util.ArrayList;
  * Created by Marry on 21.09.2016.
  */
 public class Peak {
+
+    private int x;
+    private int y;
+    private boolean visited;
+    private int user;
+
     public int getX() {
         return x;
     }
@@ -22,9 +28,6 @@ public class Peak {
         this.y = y;
     }
 
-    private int x;
-    private int y;
-
     public int getUser() {
         return user;
     }
@@ -33,8 +36,6 @@ public class Peak {
         this.user = user;
     }
 
-    private int user;
-
     public boolean isVisited() {
         return visited;
     }
@@ -42,8 +43,6 @@ public class Peak {
     public void setVisited(boolean visited) {
         this.visited = visited;
     }
-
-    private boolean visited;
 
     public Peak(int x, int y, int user) {
         this.x = x;
