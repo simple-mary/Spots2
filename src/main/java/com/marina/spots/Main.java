@@ -3,6 +3,7 @@ package com.marina.spots;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Queue;
 
 /**
@@ -13,6 +14,7 @@ public class Main {
     private static final GameField field = new GameField(30);
     private static final Spot spot = new Spot();
     private static final WideSearchAlgorithm algorithm = new WideSearchAlgorithm();
+    private static HashSet<Queue<Peak>> queues = new HashSet<java.util.Queue<Peak>>();
 
     public static JSONObject generateJsonObject(String x, String y, String user) {
         JSONObject jsonObject = new JSONObject();
@@ -63,15 +65,15 @@ public class Main {
 
         field.getAllSpotsFromField();
         ArrayList<Peak> peaks = spot.getSpots(5);
+
         for (Peak peak : peaks) {
             System.out.println("Begin search from peak with X: "
                     + peak.getX() + " and Y :" + peak.getY());
             // search
             algorithm.clearAll(peaks, peak);
             algorithm.dfs(peaks, peak, peak);
+            queues.add(algorithm.getQueue());
         }
-        algorithm.chain.getQueues();
-
     }
 
 
