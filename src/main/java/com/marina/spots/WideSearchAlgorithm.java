@@ -44,6 +44,12 @@ public class WideSearchAlgorithm {
 
     public void dfs(ArrayList<Peak> peaksOfUser, Peak peak, Peak goalPeak)
     {
+        if(peak.isVisited() && peak.equals(goalPeak))
+        {
+            System.out.println("Goal peak was found");
+            chain.getQueues().add(chain.getQueue());
+            return;
+        }
         if(peak.isVisited())
         {
             System.out.println("Peak is already visited coordinate X: " + peak.getX() + " and Y: " + peak.getY());

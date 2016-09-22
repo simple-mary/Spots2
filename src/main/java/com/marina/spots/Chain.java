@@ -10,23 +10,7 @@ import java.util.Queue;
 public class Chain {
 
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Chain)) return false;
-
-        Chain chain = (Chain) o;
-
-        return getQueue().equals(chain.getQueue());
-
-    }
-
-    @Override
-    public int hashCode() {
-        return getQueue().hashCode();
-    }
-
-    Queue queue = new LinkedList<Peak>();
+    java.util.Queue queue = new LinkedList<Peak>();
     HashSet<java.util.Queue<Peak>> queues = new HashSet<java.util.Queue<Peak>>();
 
     public java.util.Queue getQueue() {
@@ -40,6 +24,8 @@ public class Chain {
     public void setQueues(HashSet<java.util.Queue<Peak>> queues) {
         this.queues = queues;
     }
+
+
 
     public HashSet<java.util.Queue<Peak>> getQueues() {
         return queues;
