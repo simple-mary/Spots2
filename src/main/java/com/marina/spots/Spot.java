@@ -29,7 +29,7 @@ public class Spot
             {
                 if (array[i][j] == user)
                 {
-                    userSpots.add(new Peak(i, j));
+                    userSpots.add(new Peak(i, j, user));
                 }
             }
         }

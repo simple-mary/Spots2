@@ -25,6 +25,16 @@ public class Peak {
     private int x;
     private int y;
 
+    public int getUser() {
+        return user;
+    }
+
+    public void setUser(int user) {
+        this.user = user;
+    }
+
+    private int user;
+
     public boolean isVisited() {
         return visited;
     }
@@ -35,9 +45,10 @@ public class Peak {
 
     private boolean visited;
 
-    public Peak(int x, int y) {
+    public Peak(int x, int y, int user) {
         this.x = x;
         this.y = y;
+        this.user = user;
     }
 
     public void clear(ArrayList<Peak> peaks) {
@@ -62,5 +73,30 @@ public class Peak {
         return false;
     }
 
+    @Override
+    public String toString()
+    {
+        return String.valueOf("Peak (" + this.getX() + "," + this.getY() + ")");
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Peak)) return false;
+
+        Peak peak = (Peak) o;
+
+        if (getX() != peak.getX()) return false;
+        if (getY() != peak.getY()) return false;
+        return getUser() == peak.getUser();
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getX();
+        result = 31 * result + getY();
+        result = 31 * result + getUser();
+        return result;
+    }
 }

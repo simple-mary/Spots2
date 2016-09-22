@@ -1,6 +1,9 @@
 package com.marina.spots;
 
+import com.sun.javafx.scene.control.skin.VirtualFlow;
+
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -9,7 +12,8 @@ import java.util.Queue;
  */
 public class WideSearchAlgorithm {
 
-    Queue queue = new LinkedList<Peak>();
+
+    final static Chain chain = new Chain();
 
     public void getQueue(ArrayList<Peak> peaks, Peak goal) {
         Queue queue = new LinkedList();
@@ -21,11 +25,8 @@ public class WideSearchAlgorithm {
                     || peak.getY() + 1 == goal.getY()
                     || peak.getY() - 1 == goal.getY()) {
                 queue.add(peak);
-//                getQueue(peaks.remove(peak), peak); // need to think how to remove
             }
-
         }
-
     }
 
     public ArrayList<Peak> getAllNeighbours(ArrayList<Peak> peaks, Peak currentPeak)
@@ -33,7 +34,7 @@ public class WideSearchAlgorithm {
         ArrayList<Peak> list = new ArrayList<Peak>();
         for (Peak peak:peaks)
         {
-            if (currentPeak.isNeighbour(peak))
+            if (currentPeak.isNeighbour(peak) && !peak.isVisited())
             {
                 list.add(peak);
             }
@@ -46,22 +47,29 @@ public class WideSearchAlgorithm {
         if(peak.isVisited())
         {
             System.out.println("Peak is already visited coordinate X: " + peak.getX() + " and Y: " + peak.getY());
-            return;
         }
-        if(peak.isVisited() && peak.equals(goalPeak))
-        {
-            System.out.println("Goal peak was found");
-            System.out.println(queue.toString());
-            return;
-        }
+
         peak.setVisited(true);
-        queue.add(peak);
-        System.out.println("X: " + peak.getX() + " Y: " + peak.getY());
-//        System.out.println(queue);
-        for(Peak peak1 : this.getAllNeighbours(peaksOfUser, peak))
+        chain.getQueue().add(peak);
+        System.out.println(peak.toString());
+        ArrayList<Peak> neighbours = this.getAllNeighbours(peaksOfUser, peak);
+
+        for(Peak neighbour : neighbours)
         {
-            dfs(peaksOfUser, peak1, goalPeak);
+            dfs(peaksOfUser, neighbour, goalPeak);
         }
+
+        if(peak.isNeighbour(goalPeak))
+        {
+            System.out.println("!!!!We have find chain!!! " + chain.getQueue().toString());
+            chain.getQueues().add(chain.getQueue());
+            return;
+        }
+    }
+
+    public void clearAll(ArrayList<Peak> peaks, Peak peak) {
+        chain.getQueue().clear();
+        peak.clear(peaks);
     }
 
 }

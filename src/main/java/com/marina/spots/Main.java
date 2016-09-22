@@ -3,6 +3,7 @@ package com.marina.spots;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Queue;
 
 /**
  * Created by Marry on 19.09.2016.
@@ -39,19 +40,42 @@ public class Main {
         field.setSpot(generateJsonObject("6", "14", "5"));
         field.setSpot(generateJsonObject("2", "13", "5"));
         field.setSpot(generateJsonObject("10", "15", "5"));
+
+        field.setSpot(generateJsonObject("2", "1", "5"));
+        field.setSpot(generateJsonObject("1", "2", "5"));
+        field.setSpot(generateJsonObject("3", "2", "5"));
+        field.setSpot(generateJsonObject("2", "3", "5"));
+
+
+        field.setSpot(generateJsonObject("10", "10", "5"));
+        field.setSpot(generateJsonObject("11", "9", "5"));
+        field.setSpot(generateJsonObject("12", "8", "5"));
+        field.setSpot(generateJsonObject("11", "7", "5"));
+        field.setSpot(generateJsonObject("10", "6", "5"));
+        field.setSpot(generateJsonObject("9", "7", "5"));
+        field.setSpot(generateJsonObject("9", "8", "5"));
+        field.setSpot(generateJsonObject("9", "9", "5"));
+
+        field.setSpot(generateJsonObject("9", "6", "5"));
+        field.setSpot(generateJsonObject("8", "6", "5"));
+        field.setSpot(generateJsonObject("9", "6", "5"));
+
+
         field.getAllSpotsFromField();
         ArrayList<Peak> peaks = spot.getSpots(5);
         for (Peak peak : peaks) {
             System.out.println("Begin search from peak with X: "
                     + peak.getX() + " and Y :" + peak.getY());
             // search
+            algorithm.clearAll(peaks, peak);
             algorithm.dfs(peaks, peak, peak);
-            // set isVisited to false
-            peak.clear(peaks);
-
         }
+        algorithm.chain.getQueues();
 
     }
 
 
 }
+
+
+//}
