@@ -14,6 +14,12 @@ public class WideSearchAlgorithm {
 
     final Queue queue = new LinkedList<Peak>();
 
+    public boolean isCycleFound() {
+        return isCycleFound;
+    }
+
+    private boolean isCycleFound = false;
+
     public java.util.Queue getQueue() {
         return queue;
     }
@@ -31,12 +37,13 @@ public class WideSearchAlgorithm {
         return list;
     }
 
-    public boolean dfs(ArrayList<Peak> peaksOfUser, Peak peak, Peak goalPeak)
+    public void dfs(ArrayList<Peak> peaksOfUser, Peak peak, Peak goalPeak)
     {
         if(peak.isVisited() && peak.equals(goalPeak))
         {
             System.out.println("Goal peak was found");
-            return true;
+            isCycleFound = true;
+            return;
         }
         if(peak.isVisited())
         {
@@ -56,8 +63,8 @@ public class WideSearchAlgorithm {
         if(peak.isNeighbour(goalPeak))
         {
             System.out.println("!!!!We have find chain!!! " + getQueue().toString());
-            return true;
+            isCycleFound = true;
+            return;
         }
-        return false;
     }
 }

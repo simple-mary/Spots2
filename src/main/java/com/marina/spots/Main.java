@@ -70,7 +70,8 @@ public class Main {
                     + peak.getX() + " and Y :" + peak.getY());
             peak.clear(peaks);
             WideSearchAlgorithm algorithm = new WideSearchAlgorithm();
-            if(algorithm.dfs(peaks, peak, peak)) {
+            algorithm.dfs(peaks, peak, peak);
+            if (algorithm.isCycleFound()) {
                 queues.add(algorithm.getQueue());
             }
         }
