@@ -12,9 +12,6 @@ import java.util.Queue;
  */
 public class WideSearchAlgorithm {
 
-
-    final static Chain chain = new Chain();
-
     java.util.Queue queue = new LinkedList<Peak>();
 
     public java.util.Queue getQueue() {
@@ -63,7 +60,7 @@ public class WideSearchAlgorithm {
 
         if(peak.isNeighbour(goalPeak))
         {
-            System.out.println("!!!!We have find chain!!! " + chain.getQueue().toString());
+            System.out.println("!!!!We have find chain!!! " + getQueue().toString());
             return;
         }
     }

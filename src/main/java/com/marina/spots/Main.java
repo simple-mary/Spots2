@@ -75,9 +75,7 @@ public class Main {
             queues.add(algorithm.getQueue());
         }
     }
-
-
 }
 
 
-//}
+
