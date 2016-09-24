@@ -10,7 +10,15 @@ public class Peak {
     private int x;
     private int y;
     private boolean visited;
-    private int user;
+    private SpotValues spotValues;
+
+    public SpotValues getSpotValues() {
+        return spotValues;
+    }
+
+    public void setSpotValues(SpotValues spotValues) {
+        this.spotValues = spotValues;
+    }
 
     public int getX() {
         return x;
@@ -28,14 +36,6 @@ public class Peak {
         this.y = y;
     }
 
-    public int getUser() {
-        return user;
-    }
-
-    public void setUser(int user) {
-        this.user = user;
-    }
-
     public boolean isVisited() {
         return visited;
     }
@@ -44,10 +44,10 @@ public class Peak {
         this.visited = visited;
     }
 
-    public Peak(int x, int y, int user) {
+    public Peak(int x, int y, SpotValues spotValues) {
         this.x = x;
         this.y = y;
-        this.user = user;
+        this.spotValues = spotValues;
     }
 
     public void clear(ArrayList<Peak> peaks) {
@@ -56,8 +56,7 @@ public class Peak {
         }
     }
 
-    public boolean isNeighbour(Peak peak)
-    {
+    public boolean isNeighbour(Peak peak) {
         if ((peak.getX() - 1 == this.getX() && peak.getY() == this.getY())
                 || (peak.getX() + 1 == this.getX() && peak.getY() == this.getY())
                 || (peak.getY() - 1 == this.getY() && peak.getX() == this.getX())
@@ -65,16 +64,14 @@ public class Peak {
                 || (peak.getX() + 1 == this.getX() && peak.getY() + 1 == this.getY())
                 || (peak.getX() + 1 == this.getX() && peak.getY() - 1 == this.getY())
                 || (peak.getX() - 1 == this.getX() && peak.getY() + 1 == this.getY())
-                || (peak.getX() - 1 == this.getX() && peak.getY() - 1 == this.getY()))
-        {
+                || (peak.getX() - 1 == this.getX() && peak.getY() - 1 == this.getY())) {
             return true;
         }
         return false;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return String.valueOf("Peak (" + this.getX() + "," + this.getY() + ")");
     }
 
@@ -85,17 +82,17 @@ public class Peak {
 
         Peak peak = (Peak) o;
 
-        if (getX() != peak.getX()) return false;
-        if (getY() != peak.getY()) return false;
-        return getUser() == peak.getUser();
+        if (x != peak.x) return false;
+        if (y != peak.y) return false;
+        return spotValues == peak.spotValues;
 
     }
 
     @Override
     public int hashCode() {
-        int result = getX();
-        result = 31 * result + getY();
-        result = 31 * result + getUser();
+        int result = x;
+        result = 31 * result + y;
+        result = 31 * result + spotValues.hashCode();
         return result;
     }
 }
