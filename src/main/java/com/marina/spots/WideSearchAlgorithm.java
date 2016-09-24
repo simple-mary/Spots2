@@ -2,17 +2,14 @@ package com.marina.spots;
 
 import com.sun.javafx.scene.control.skin.VirtualFlow;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * Created by Marry on 20.09.2016.
  */
 public class WideSearchAlgorithm {
 
-    final Queue queue = new LinkedList<Peak>();
+    final Deque<Peak> queue = new LinkedList<Peak>();
 
     public boolean isCycleFound() {
         return isCycleFound;
@@ -20,7 +17,7 @@ public class WideSearchAlgorithm {
 
     private boolean isCycleFound = false;
 
-    public java.util.Queue getQueue() {
+    public Deque getQueue() {
         return queue;
     }
 
@@ -41,31 +38,50 @@ public class WideSearchAlgorithm {
     {
         if(peak.isVisited() && peak.equals(goalPeak))
         {
-            System.out.println("Goal peak was found");
-            isCycleFound = true;
+            if(getQueue().size() > 3) {
+//            System.out.println("Goal peak was found");
+                isCycleFound = true;
+            }
             return;
         }
         if(peak.isVisited())
         {
-            System.out.println("Peak is already visited coordinate X: " + peak.getX() + " and Y: " + peak.getY());
+//            System.out.println("Peak is already visited coordinate X: " + peak.getX() + " and Y: " + peak.getY());
+            if(!isCycleFound&& !queue.isEmpty())
+            {
+                queue.removeLast().setVisited(false);
+            }
             return;
         }
 
         peak.setVisited(true);
         getQueue().add(peak);
-        System.out.println(peak.toString());
+//        System.out.println(peak.toString());
         ArrayList<Peak> neighbours = this.getAllNeighbours(peaksOfUser, peak);
 
         for(Peak neighbour : neighbours)
         {
-            dfs(peaksOfUser, neighbour, goalPeak);
+            if(!isCycleFound)
+            {
+                dfs(peaksOfUser, neighbour, goalPeak);
+            }
         }
 
         if(peak.isNeighbour(goalPeak))
         {
+            if(getQueue().size() > 3) {
             System.out.println("!!!!We have find chain!!! " + getQueue().toString());
-            isCycleFound = true;
+                isCycleFound = true;
+            }
+            if(!isCycleFound&& !queue.isEmpty())
+            {
+                queue.removeLast().setVisited(false);
+            }
             return;
+        }
+        if(!isCycleFound && !queue.isEmpty())
+        {
+            queue.removeLast().setVisited(false);
         }
     }
 }

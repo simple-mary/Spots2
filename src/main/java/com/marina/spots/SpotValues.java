@@ -30,5 +30,16 @@ enum  SpotValues {
     {
         return value;
     }
+
+    public boolean isSpotBelongsToUser1()
+    {
+        return (this.equals(PLAYER1) || this.equals(BLOCK1) || this.equals(BLOCKED_BY_PLAYER1));
+
+    }
+
+    public boolean isSpotBelongsToUser2()
+    {
+        return (this.equals(PLAYER2) || this.equals(BLOCK2) || this.equals(BLOCKED_BY_PLAYER2));
+    }
 }
 

@@ -52,10 +52,15 @@ public class GameField {
         if (fieldPoints[x][y].equals(SpotValues.FREE)) {
             fieldPoints[x][y] = user;
         }
+        else
+        {
+            throw new IllegalArgumentException(jsonObject.toString());
+        }
     }
 
     public void printAllSpotsFromField() {
         for (int j = 0; j < fieldPoints.length; j++) {
+            System.out.print(j+": ");
             for (int i = 0; i < fieldPoints.length; i++) {
                 System.out.print(fieldPoints[i][j] + "\t");
             }
@@ -177,12 +182,27 @@ public class GameField {
         int result = 0;
         for (SpotValues[] rows : fieldPoints) {
             for (SpotValues value : rows) {
-                if(value.equals(x))
+
+                if(value.isSpotBelongsToUser1() && x.equals(SpotValues.PLAYER1)
+                        || value.isSpotBelongsToUser2() && x.equals(SpotValues.PLAYER2))
                 {
                     result++;
                 }
             }
         }
         return result;
+    }
+
+    public boolean isEmptyFields()
+    {
+        for (SpotValues[] fieldPoint : fieldPoints) {
+            for (SpotValues values : fieldPoint) {
+                if(values.equals(SpotValues.FREE))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
