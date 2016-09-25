@@ -55,7 +55,7 @@ public class WideSearchAlgorithm {
         }
 
         peak.setVisited(true);
-        getQueue().add(peak);
+        queue.add(peak);
 //        System.out.println(peak.toString());
         ArrayList<Peak> neighbours = this.getAllNeighbours(peaksOfUser, peak);
 
@@ -65,9 +65,13 @@ public class WideSearchAlgorithm {
             {
                 dfs(peaksOfUser, neighbour, goalPeak);
             }
+            else
+            {
+                break;
+            }
         }
 
-        if(peak.isNeighbour(goalPeak))
+        if(!isCycleFound&&peak.isNeighbour(goalPeak))
         {
             if(getQueue().size() > 3) {
             System.out.println("!!!!We have find chain!!! " + getQueue().toString());

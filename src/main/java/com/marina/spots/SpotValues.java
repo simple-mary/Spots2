@@ -10,8 +10,8 @@ enum  SpotValues {
     EDGE("E"),
     BLOCK1("B1"),
     BLOCK2("B2"),
-    BLOCKED_BY_PLAYER1("X1"),
-    BLOCKED_BY_PLAYER2("X2");
+    CAPTURED_BY_PLAYER1("C1"),
+    CAPTURED_BY_PLAYER2("C2");
 
     private String value;
 
@@ -33,13 +33,13 @@ enum  SpotValues {
 
     public boolean isSpotBelongsToUser1()
     {
-        return (this.equals(PLAYER1) || this.equals(BLOCK1) || this.equals(BLOCKED_BY_PLAYER1));
+        return (this.equals(PLAYER1) || this.equals(BLOCK1) || this.equals(CAPTURED_BY_PLAYER1));
 
     }
 
     public boolean isSpotBelongsToUser2()
     {
-        return (this.equals(PLAYER2) || this.equals(BLOCK2) || this.equals(BLOCKED_BY_PLAYER2));
+        return (this.equals(PLAYER2) || this.equals(BLOCK2) || this.equals(CAPTURED_BY_PLAYER2));
     }
 }
 
