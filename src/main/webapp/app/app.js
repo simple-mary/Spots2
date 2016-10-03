@@ -10,6 +10,20 @@ var delta = 40;
 //size of canvas
 var cw = bw + (p * 2) + 1;
 var ch = bh + (p * 2) + 1;
+var color = '';
+
+function getColor() {
+  if(color != null) {
+    return color;
+  }
+  else {
+    return color = "red";
+  }
+}
+
+function setColor(color) {
+  this.color = color;
+}
 
 function point(x, y, context, color){
   context.beginPath();
@@ -35,7 +49,7 @@ function isClickOnPoint(x,y, context)
   yn=Math.floor((y+r)/delta)*delta;
   if((xn-r<=x && xn+r>=x) && (yn-r<=y && y<=yn+r))
   {
-    point(xn, yn, context, 'red');
+    point(xn, yn, context, getColor());
     console.log(true);
     return true;
   }
@@ -43,6 +57,7 @@ function isClickOnPoint(x,y, context)
   console.log(false);
   return false;
 }
+
 
 app.service("ChatService", function($q, $timeout) {
 
@@ -152,6 +167,25 @@ app.controller('myCtrl', function ($scope, ChatService) {
     drawPoints(context);
 
   };
+});
+
+
+app.controller('btnController', function ($scope) {
+  $scope.ButtonClick = function (message) {
+
+    if(message === "P1" )
+    {
+      setColor("red");
+      $scope.Message = "Button clicked." + message;
+      $scope.Color = "Color is " + getColor();
+    }
+    else
+    {
+      setColor("blue");
+      $scope.Color = "Color is " + getColor();
+    }
+
+  }
 });
 
 

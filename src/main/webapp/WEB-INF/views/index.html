@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:style="http://www.w3.org/1999/xhtml">
 
 <head>
     <meta charset="utf-8"/>
@@ -20,6 +20,21 @@
     <canvas id="canvas" width="401" height="401" ng-click="doClick($event)">
     </canvas>
 </div>
+<div id="left" ng-controller="btnController" style="left: 515px;">
+    <input type="button" value="PLAYER1" ng-click="ButtonClick('P1')" id="P1"/>
+    <br>
+    <input type="button" value="PLAYER2" ng-click="ButtonClick('P2')" id="P2"/>
+    <br>
+    <input type="button" value="FINISH THE GAME" ng-click="ButtonClick('Finish')" id="Finish"/>
+    <br>
+    <input type="button" value="Click Me!" ng-click="ButtonClick('P1')" />
+    <br/>
+    <br/>
+    <span ng-bind="Message"></span>
+    <br/>
+    <br/>
+    <span ng-bind="Color"></span>
+    </div>
 
 </body>
 

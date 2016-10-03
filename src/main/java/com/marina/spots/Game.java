@@ -39,29 +39,15 @@ public class Game {
                 isCycleFound = true;
                 field.printField();
                 System.out.println(cycles.toString());
+                field.paintAllCycles(cycles);
             }
-            field.paintAllCycles(cycles);
-            field.printField();
-//            Thread.sleep(500);
-
-            System.out.println();
-            System.out.println();
-            user = user.equals("PLAYER1") ? "PLAYER2" : "PLAYER1";
         }
 
-//        System.out.println(cycles.toString());
-//        field.paintAllCycles(cycles);
-//        field.printField();
-        System.out.println("Captured spots for player1 " + field.computeCapturedDots("PLAYER1"));
-        System.out.println("Captured spots for player2 " + field.computeCapturedDots("PLAYER2"));
-
-        System.out.println("Square for player1 " + field.computeSquareByPlayer("PLAYER1"));
-        System.out.println("Square for player2 " + field.computeSquareByPlayer("PLAYER2"));
         return isCycleFound;
     }
 
     private static ArrayList<Queue<Dot>> findAllCycles(String player, Dot dot) {
-        ArrayList<Dot> dots = field.getUserDots(DotValues.valueOf(player));
+        ArrayList<Dot> dots = field.getUserDots(dot.getDotValues());
         ArrayList<Queue<Dot>> cycles = new ArrayList<Queue<Dot>>();
         dot.clear(dots);
         WideSearchAlgorithm algorithm = new WideSearchAlgorithm();

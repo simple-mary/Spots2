@@ -44,13 +44,13 @@ public class GameField
         {
             for (int j = 0; j < size; j++)
             {
-                if (i == 0 || j == 0 || i == size - 1 || j == size - 1)
-                {
-                    fieldPoints[i][j] = DotValues.EDGE;
-                } else
-                {
+//                if (i == 0 || j == 0 || i == size - 1 || j == size - 1)
+//                {
+//                    fieldPoints[i][j] = DotValues.EDGE;
+//                } else
+//                {
                     fieldPoints[i][j] = DotValues.FREE;
-                }
+//                }
             }
         }
     }
@@ -97,7 +97,7 @@ public class GameField
 
     public ArrayList<Dot> getUserDots(DotValues user)
     {
-        ArrayList<Dot> userSpots = new ArrayList<Dot>();
+        ArrayList<Dot> userDots = new ArrayList<Dot>();
         int length = fieldPoints.length;
 
         for (int i = 0; i < length; i++)
@@ -106,11 +106,11 @@ public class GameField
             {
                 if (fieldPoints[i][j].equals(user))
                 {
-                    userSpots.add(new Dot(i, j, user));
+                    userDots.add(new Dot(i, j, user));
                 }
             }
         }
-        return userSpots;
+        return userDots;
     }
 
 
