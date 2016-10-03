@@ -1,15 +1,14 @@
 package com.marina.spots.dto;
 
-import com.marina.spots.Dot;
 
 import java.util.Date;
 
-public class OutputMessage extends Message {
+public class OutputMessage extends DotDTO {
 
 	private Date time;
 	
-	public OutputMessage(Dot original, Date time) {
-		super(original.getX(), original.getY());
+	public OutputMessage(DotDTO original, Date time) {
+		super(original.getX(), original.getY(), original.getDotValues());
 		this.time = time;
 	}
 	

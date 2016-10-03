@@ -1,6 +1,6 @@
 package com.marina.spots.controller;
 
-import com.marina.spots.Dot;
+import com.marina.spots.dto.DotDTO;
 import com.marina.spots.dto.OutputMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,10 +23,10 @@ public class MessageController {
     return "index";
   }
 
-  @MessageMapping("/app/chat")
+  @MessageMapping("/chat")
   @SendTo("/topic/message")
-  public OutputMessage sendMessage(Dot dot) {
-    logger.info("Message sent");
-    return new OutputMessage(dot, new Date());
+  public OutputMessage sendMessage(DotDTO dotDTO) {
+    logger.info("DotDTO sent");
+    return new OutputMessage(dotDTO, new Date());
   }
 }
