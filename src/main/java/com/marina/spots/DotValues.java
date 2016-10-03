@@ -1,8 +1,12 @@
 package com.marina.spots;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 /**
  * Created by Marry on 24.09.2016.
  */
+@JsonSerialize(using = TypeSerializer.class)
 public enum DotValues {
     PLAYER1("P1"),
     PLAYER2("P2"),
@@ -19,6 +23,7 @@ public enum DotValues {
         value = b2;
     }
 
+    @JsonValue
     public String getValue() {
         return value;
     }

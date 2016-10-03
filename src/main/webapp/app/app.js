@@ -131,7 +131,7 @@ app.controller('myCtrl', function ($scope, ChatService) {
     if(isClickOnPoint(e.clientX, e.clientY, $scope.context)) {
       xn=Math.floor((e.clientX+r)/delta);
       yn=Math.floor((e.clientY+r)/delta);
-      ChatService.send(xn,yn,"P1");
+      ChatService.send(xn,yn, "P1");
     }
   };
   $scope.drawBoard = function () {
