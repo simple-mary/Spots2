@@ -24,45 +24,8 @@ public class Main {
         return jsonObject;
     }
 
-    public static void main(String[] args) throws InterruptedException {
+    public void main(String[] args) throws InterruptedException {
         field.initializeField();
-//        field.setSpot(generateJsonObject("5", "10", "PLAYER1"));
-//        field.setSpot(generateJsonObject("6", "10", "PLAYER2"));
-//        field.setSpot(generateJsonObject("18", "12", "PLAYER1"));
-//        field.setSpot(generateJsonObject("19", "3", "PLAYER2"));
-//        field.setSpot(generateJsonObject("7", "11", "PLAYER1"));
-//        field.setSpot(generateJsonObject("3", "19", "PLAYER2"));
-//        field.setSpot(generateJsonObject("7", "15", "PLAYER1"));
-//        field.setSpot(generateJsonObject("1", "13", "PLAYER2"));
-//        field.setSpot(generateJsonObject("3", "13", "PLAYER1"));
-//        field.setSpot(generateJsonObject("3", "12", "PLAYER1"));
-//        field.setSpot(generateJsonObject("4", "14", "PLAYER1"));
-//        field.setSpot(generateJsonObject("5", "14", "PLAYER1"));
-//        field.setSpot(generateJsonObject("6", "14", "PLAYER1"));
-//        field.setSpot(generateJsonObject("2", "13", "PLAYER1"));
-//        field.setSpot(generateJsonObject("10", "15", "PLAYER1"));
-//
-//        field.setSpot(generateJsonObject("2", "1", "PLAYER1"));
-//        field.setSpot(generateJsonObject("4", "1", "PLAYER1"));
-//        field.setSpot(generateJsonObject("3", "1", "PLAYER1"));
-//        field.setSpot(generateJsonObject("1", "2", "PLAYER1"));
-//        field.setSpot(generateJsonObject("3", "2", "PLAYER1"));
-//        field.setSpot(generateJsonObject("2", "3", "PLAYER1"));
-//
-//
-//        field.setSpot(generateJsonObject("10", "10", "PLAYER1"));
-//        field.setSpot(generateJsonObject("11", "9", "PLAYER1"));
-//        field.setSpot(generateJsonObject("12", "8", "PLAYER1"));
-//        field.setSpot(generateJsonObject("11", "7", "PLAYER1"));
-//        field.setSpot(generateJsonObject("10", "6", "PLAYER1"));
-//        field.setSpot(generateJsonObject("9", "7", "PLAYER1"));
-//        field.setSpot(generateJsonObject("9", "8", "PLAYER1"));
-//        field.setSpot(generateJsonObject("9", "9", "PLAYER1"));
-//
-//        field.setSpot(generateJsonObject("9", "6", "PLAYER1"));
-//        field.setSpot(generateJsonObject("8", "6", "PLAYER1"));
-//        field.setSpot(generateJsonObject("9", "6", "PLAYER1"));
-
         String user = "PLAYER1";
         while (!isFinish())
         {

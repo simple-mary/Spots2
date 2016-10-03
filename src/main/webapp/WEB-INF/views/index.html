@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8"/>
+    <script src="lib/jQuery/dist/jquery.min.js"></script>
+    <script src="lib/angular/angular.min.js"></script>
+    <script src="app/app.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js" type="text/javascript"></script>
+    <script src="http://cdn.sockjs.org/sockjs-0.3.4.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.js"></script>
+
+
+    <!--<script src="lib/angular-websocket/angular-websocket.js"></script>-->
+</head>
+
+<body ng-app="myApp" style="margin: 0px;">
+
+<div ng-controller="myCtrl" ng-init="drawBoard()">
+    <canvas id="canvas" width="401" height="401" ng-click="doClick($event)">
+    </canvas>
+</div>
+
+</body>
+
+
+</html>
