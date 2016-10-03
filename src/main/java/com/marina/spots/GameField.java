@@ -2,6 +2,7 @@ package com.marina.spots;
 
 import com.google.common.collect.Sets;
 import org.json.JSONObject;
+import com.marina.spots.dto.DotDTO;
 
 import java.util.*;
 
@@ -68,6 +69,11 @@ public class GameField
         }
     }
 
+    public void setSpot(DotDTO dotDTO)
+    {
+        fieldPoints[dotDTO.getX()][dotDTO.getY()] = dotDTO.getDotValues();
+    }
+
     public void printField()
     {
         System.out.print("\t");
@@ -89,7 +95,7 @@ public class GameField
     }
 
 
-    public ArrayList<Dot> getUserPeaks(DotValues user)
+    public ArrayList<Dot> getUserDots(DotValues user)
     {
         ArrayList<Dot> userSpots = new ArrayList<Dot>();
         int length = fieldPoints.length;
@@ -108,7 +114,7 @@ public class GameField
     }
 
 
-    public Set<Dot> findPeakOnX(Queue<Dot> dots)
+    public Set<Dot> findDotOnX(Queue<Dot> dots)
     {
         Set<Dot> dotList = new HashSet<>();
         for (Dot dot : dots)
@@ -132,7 +138,7 @@ public class GameField
         return dotList;
     }
 
-    public Set<Dot> findPeakOnY(Queue<Dot> dots)
+    public Set<Dot> findDotOnY(Queue<Dot> dots)
     {
         Set<Dot> dotList = new HashSet<>();
         for (Dot dot : dots)
@@ -159,14 +165,14 @@ public class GameField
 
     private void paintArea(Queue<Dot> dots)
     {
-        Set<Dot> dotToPaint = Sets.intersection(findPeakOnX(dots), findPeakOnY(dots));
+        Set<Dot> dotToPaint = Sets.intersection(findDotOnX(dots), findDotOnY(dots));
         for (Dot dot : dotToPaint)
         {
-            blockPeak(dot, dots.element().getDotValues());
+            blockDot(dot, dots.element().getDotValues());
         }
     }
 
-    private void blockPeak(Dot dot, DotValues cycleOwner)
+    private void blockDot(Dot dot, DotValues cycleOwner)
     {
         if (fieldPoints[dot.getX()][dot.getY()].equals(DotValues.FREE))
         {
@@ -234,7 +240,7 @@ public class GameField
     }
 
 
-    public int computeCapturedSpots(String player)
+    public int computeCapturedDots(String player)
     {
         DotValues x;
         if (DotValues.valueOf(player).equals(DotValues.PLAYER1))

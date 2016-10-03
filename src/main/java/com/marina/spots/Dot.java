@@ -1,5 +1,7 @@
 package com.marina.spots;
 
+import com.marina.spots.dto.DotDTO;
+
 import java.util.ArrayList;
 
 /**
@@ -48,6 +50,13 @@ public class Dot {
         this.x = x;
         this.y = y;
         this.dotValues = dotValues;
+    }
+
+    public Dot(DotDTO dotDTO)
+    {
+        this.x = dotDTO.getX();
+        this.y = dotDTO.getY();
+        this.dotValues = dotDTO.getDotValues();
     }
 
     public void clear(ArrayList<Dot> dots) {

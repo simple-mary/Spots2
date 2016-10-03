@@ -1,5 +1,6 @@
 package com.marina.spots.controller;
 
+import com.marina.spots.Game;
 import com.marina.spots.dto.DotDTO;
 import com.marina.spots.dto.OutputMessage;
 import org.slf4j.Logger;
@@ -17,7 +18,7 @@ import java.util.Date;
 public class MessageController {
 
   private Logger logger = LoggerFactory.getLogger(getClass());
-
+  private Game game = new Game();
   @RequestMapping(method = RequestMethod.GET)
   public String viewApplication() {
     return "index";
@@ -27,6 +28,13 @@ public class MessageController {
   @SendTo("/topic/message")
   public OutputMessage sendMessage(DotDTO dotDTO) {
     logger.info("DotDTO sent");
-    return new OutputMessage(dotDTO, new Date());
+    try {
+      if(game.game(dotDTO)) {
+        return new OutputMessage(dotDTO, new Date());
+      }
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 }
