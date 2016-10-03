@@ -12,7 +12,7 @@ public class GameField
 {
 
     private int fieldSize;
-    public SpotValues[][] fieldPoints;
+    public DotValues[][] fieldPoints;
 
     public int getFieldSize()
     {
@@ -38,17 +38,17 @@ public class GameField
     public void initializeField()
     {
         int size = getFieldSize();
-        fieldPoints = new SpotValues[size][size];
+        fieldPoints = new DotValues[size][size];
         for (int i = 0; i < size; i++)
         {
             for (int j = 0; j < size; j++)
             {
                 if (i == 0 || j == 0 || i == size - 1 || j == size - 1)
                 {
-                    fieldPoints[i][j] = SpotValues.EDGE;
+                    fieldPoints[i][j] = DotValues.EDGE;
                 } else
                 {
-                    fieldPoints[i][j] = SpotValues.FREE;
+                    fieldPoints[i][j] = DotValues.FREE;
                 }
             }
         }
@@ -58,8 +58,8 @@ public class GameField
     {
         int x = Integer.parseInt(jsonObject.get("x").toString());
         int y = Integer.parseInt(jsonObject.get("y").toString());
-        SpotValues user = SpotValues.valueOf(jsonObject.get("user").toString());
-        if (fieldPoints[x][y].equals(SpotValues.FREE))
+        DotValues user = DotValues.valueOf(jsonObject.get("user").toString());
+        if (fieldPoints[x][y].equals(DotValues.FREE))
         {
             fieldPoints[x][y] = user;
         } else
@@ -89,9 +89,9 @@ public class GameField
     }
 
 
-    public ArrayList<Peak> getUserPeaks(SpotValues user)
+    public ArrayList<Dot> getUserPeaks(DotValues user)
     {
-        ArrayList<Peak> userSpots = new ArrayList<Peak>();
+        ArrayList<Dot> userSpots = new ArrayList<Dot>();
         int length = fieldPoints.length;
 
         for (int i = 0; i < length; i++)
@@ -100,7 +100,7 @@ public class GameField
             {
                 if (fieldPoints[i][j].equals(user))
                 {
-                    userSpots.add(new Peak(i, j, user));
+                    userSpots.add(new Dot(i, j, user));
                 }
             }
         }
@@ -108,110 +108,110 @@ public class GameField
     }
 
 
-    public Set<Peak> findPeakOnX(Queue<Peak> peaks)
+    public Set<Dot> findPeakOnX(Queue<Dot> dots)
     {
-        Set<Peak> peakList = new HashSet<>();
-        for (Peak peak : peaks)
+        Set<Dot> dotList = new HashSet<>();
+        for (Dot dot : dots)
         {
-            for (Peak peak1 : peaks)
+            for (Dot dot1 : dots)
             {
-                if (peak.getY() == peak1.getY() && peak.getX() != peak1.getX())
+                if (dot.getY() == dot1.getY() && dot.getX() != dot1.getX())
                 {
-                    if (peak.getX() - peak1.getX() > 1)
+                    if (dot.getX() - dot1.getX() > 1)
                     {
-                        int minX = Math.min(peak.getX(), peak1.getX());
-                        int maxX = Math.max(peak.getX(), peak1.getX());
+                        int minX = Math.min(dot.getX(), dot1.getX());
+                        int maxX = Math.max(dot.getX(), dot1.getX());
                         for (int i = minX + 1; i < maxX; i++)
                         {
-                            peakList.add(new Peak(i, peak.getY(), fieldPoints[i][peak.getY()]));
+                            dotList.add(new Dot(i, dot.getY(), fieldPoints[i][dot.getY()]));
                         }
                     }
                 }
             }
         }
-        return peakList;
+        return dotList;
     }
 
-    public Set<Peak> findPeakOnY(Queue<Peak> peaks)
+    public Set<Dot> findPeakOnY(Queue<Dot> dots)
     {
-        Set<Peak> peakList = new HashSet<>();
-        for (Peak peak : peaks)
+        Set<Dot> dotList = new HashSet<>();
+        for (Dot dot : dots)
         {
-            for (Peak peak1 : peaks)
+            for (Dot dot1 : dots)
             {
-                if (peak.getX() == peak1.getX() && peak.getY() != peak1.getY())
+                if (dot.getX() == dot1.getX() && dot.getY() != dot1.getY())
                 {
-                    if (peak.getY() - peak1.getY() > 1)
+                    if (dot.getY() - dot1.getY() > 1)
                     {
-                        int minY = Math.min(peak.getY(), peak1.getY());
-                        int maxY = Math.max(peak.getY(), peak1.getY());
+                        int minY = Math.min(dot.getY(), dot1.getY());
+                        int maxY = Math.max(dot.getY(), dot1.getY());
                         for (int i = minY + 1; i < maxY; i++)
                         {
-                            peakList.add(new Peak(peak.getX(), i, fieldPoints[peak.getX()][i]));
+                            dotList.add(new Dot(dot.getX(), i, fieldPoints[dot.getX()][i]));
                         }
                     }
                 }
             }
         }
-        return peakList;
+        return dotList;
     }
 
 
-    private void paintArea(Queue<Peak> peaks)
+    private void paintArea(Queue<Dot> dots)
     {
-        Set<Peak> peakToPaint = Sets.intersection(findPeakOnX(peaks), findPeakOnY(peaks));
-        for (Peak peak : peakToPaint)
+        Set<Dot> dotToPaint = Sets.intersection(findPeakOnX(dots), findPeakOnY(dots));
+        for (Dot dot : dotToPaint)
         {
-            blockPeak(peak, peaks.element().getSpotValues());
+            blockPeak(dot, dots.element().getDotValues());
         }
     }
 
-    private void blockPeak(Peak peak, SpotValues cycleOwner)
+    private void blockPeak(Dot dot, DotValues cycleOwner)
     {
-        if (fieldPoints[peak.getX()][peak.getY()].equals(SpotValues.FREE))
+        if (fieldPoints[dot.getX()][dot.getY()].equals(DotValues.FREE))
         {
-            fieldPoints[peak.getX()][peak.getY()] =
-                   cycleOwner.equals(SpotValues.PLAYER1) ? SpotValues.BLOCK1 : SpotValues.BLOCK2;
+            fieldPoints[dot.getX()][dot.getY()] =
+                   cycleOwner.equals(DotValues.PLAYER1) ? DotValues.BLOCK1 : DotValues.BLOCK2;
         }
 
-        if (!cycleOwner.equals(fieldPoints[peak.getX()][peak.getY()]))
+        if (!cycleOwner.equals(fieldPoints[dot.getX()][dot.getY()]))
         {
-            fieldPoints[peak.getX()][peak.getY()] =
-                    cycleOwner.equals(SpotValues.PLAYER1) ? SpotValues.CAPTURED_BY_PLAYER1 : SpotValues.CAPTURED_BY_PLAYER2;
+            fieldPoints[dot.getX()][dot.getY()] =
+                    cycleOwner.equals(DotValues.PLAYER1) ? DotValues.CAPTURED_BY_PLAYER1 : DotValues.CAPTURED_BY_PLAYER2;
         }
     }
 
-    public void paintAllCycles(ArrayList<Queue<Peak>> arrayList)
+    public void paintAllCycles(ArrayList<Queue<Dot>> arrayList)
     {
-        ArrayList<Queue<Peak>> cuted = getUniqueCycles(arrayList);
-        for (Queue<Peak> p : cuted)
+        ArrayList<Queue<Dot>> cuted = getUniqueCycles(arrayList);
+        for (Queue<Dot> p : cuted)
         {
             System.out.println("start new cycle" + p);
             paintArea(p);
         }
     }
 
-    public boolean isQueueHasSameElements(Queue<Peak> first, Queue<Peak> second)
+    public boolean isQueueHasSameElements(Queue<Dot> first, Queue<Dot> second)
     {
         if (first.size() != second.size())
         {
             return false;
         }
 
-        return new HashSet<Peak>(first).equals(new HashSet<Peak>(second));
+        return new HashSet<Dot>(first).equals(new HashSet<Dot>(second));
     }
 
-    public ArrayList<Queue<Peak>> getUniqueCycles(ArrayList<Queue<Peak>> arrayList)
+    public ArrayList<Queue<Dot>> getUniqueCycles(ArrayList<Queue<Dot>> arrayList)
     {
 
-        /*Iterator<Queue<Peak>> iteratorI = arrayList.iterator();
-        Iterator<Queue<Peak>> iteratorJ = arrayList.listIterator();
+        /*Iterator<Queue<Dot>> iteratorI = arrayList.iterator();
+        Iterator<Queue<Dot>> iteratorJ = arrayList.listIterator();
         while (iteratorI.hasNext())
         {
-            Queue<Peak> itI = iteratorI.next();
+            Queue<Dot> itI = iteratorI.next();
             while (iteratorJ.hasNext())
             {
-                Queue<Peak> itJ = iteratorJ.next();
+                Queue<Dot> itJ = iteratorJ.next();
                 if (itI!=itJ && isQueueHasSameElements(itI, itJ))
                 {
                     iteratorI.remove();
@@ -219,7 +219,7 @@ public class GameField
                 }
             }
         }*/
-        ArrayList<Queue<Peak>> uniqueList = new ArrayList<>(arrayList);
+        ArrayList<Queue<Dot>> uniqueList = new ArrayList<>(arrayList);
         for (int i = 0; i < arrayList.size(); i++)
         {
             for (int j = i+1; j < arrayList.size(); j++)
@@ -236,18 +236,18 @@ public class GameField
 
     public int computeCapturedSpots(String player)
     {
-        SpotValues x;
-        if (SpotValues.valueOf(player).equals(SpotValues.PLAYER1))
+        DotValues x;
+        if (DotValues.valueOf(player).equals(DotValues.PLAYER1))
         {
-            x = SpotValues.CAPTURED_BY_PLAYER1;
+            x = DotValues.CAPTURED_BY_PLAYER1;
         } else
         {
-            x = SpotValues.CAPTURED_BY_PLAYER2;
+            x = DotValues.CAPTURED_BY_PLAYER2;
         }
         int result = 0;
-        for (SpotValues[] rows : fieldPoints)
+        for (DotValues[] rows : fieldPoints)
         {
-            for (SpotValues value : rows)
+            for (DotValues value : rows)
             {
                 if (value.equals(x))
                 {
@@ -261,22 +261,22 @@ public class GameField
 
     public int computeSquareByPlayer(String player)
     {
-        SpotValues x;
-        if (SpotValues.valueOf(player).equals(SpotValues.PLAYER1))
+        DotValues x;
+        if (DotValues.valueOf(player).equals(DotValues.PLAYER1))
         {
-            x = SpotValues.PLAYER1;
+            x = DotValues.PLAYER1;
         } else
         {
-            x = SpotValues.PLAYER2;
+            x = DotValues.PLAYER2;
         }
         int result = 0;
-        for (SpotValues[] rows : fieldPoints)
+        for (DotValues[] rows : fieldPoints)
         {
-            for (SpotValues value : rows)
+            for (DotValues value : rows)
             {
 
-                if (value.isSpotBelongsToUser1() && x.equals(SpotValues.PLAYER1)
-                        || value.isSpotBelongsToUser2() && x.equals(SpotValues.PLAYER2))
+                if (value.isDotBelongsToUser1() && x.equals(DotValues.PLAYER1)
+                        || value.isDotBelongsToUser2() && x.equals(DotValues.PLAYER2))
                 {
                     result++;
                 }
@@ -287,11 +287,11 @@ public class GameField
 
     public boolean isEmptyFields()
     {
-        for (SpotValues[] fieldPoint : fieldPoints)
+        for (DotValues[] fieldPoint : fieldPoints)
         {
-            for (SpotValues values : fieldPoint)
+            for (DotValues values : fieldPoint)
             {
-                if (values.equals(SpotValues.FREE))
+                if (values.equals(DotValues.FREE))
                 {
                     return true;
                 }
@@ -303,11 +303,11 @@ public class GameField
     public int countEmptyFields()
     {
         int i = 0;
-        for (SpotValues[] fieldPoint : fieldPoints)
+        for (DotValues[] fieldPoint : fieldPoints)
         {
-            for (SpotValues values : fieldPoint)
+            for (DotValues values : fieldPoint)
             {
-                if (values.equals(SpotValues.FREE))
+                if (values.equals(DotValues.FREE))
                 {
                    i++;
                 }

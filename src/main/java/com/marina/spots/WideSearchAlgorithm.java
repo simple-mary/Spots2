@@ -1,7 +1,5 @@
 package com.marina.spots;
 
-import com.sun.javafx.scene.control.skin.VirtualFlow;
-
 import java.util.*;
 
 /**
@@ -9,7 +7,7 @@ import java.util.*;
  */
 public class WideSearchAlgorithm {
 
-    final Deque<Peak> queue = new LinkedList<Peak>();
+    final Deque<Dot> queue = new LinkedList<Dot>();
 
     public boolean isCycleFound() {
         return isCycleFound;
@@ -21,32 +19,32 @@ public class WideSearchAlgorithm {
         return queue;
     }
 
-    public ArrayList<Peak> getAllNeighbours(ArrayList<Peak> peaks, Peak currentPeak)
+    public ArrayList<Dot> getAllNeighbours(ArrayList<Dot> dots, Dot currentDot)
     {
-        ArrayList<Peak> list = new ArrayList<Peak>();
-        for (Peak peak:peaks)
+        ArrayList<Dot> list = new ArrayList<Dot>();
+        for (Dot dot : dots)
         {
-            if (currentPeak.isNeighbour(peak) && !peak.isVisited())
+            if (currentDot.isNeighbour(dot) && !dot.isVisited())
             {
-                list.add(peak);
+                list.add(dot);
             }
         }
         return list;
     }
 
-    public void dfs(ArrayList<Peak> peaksOfUser, Peak peak, Peak goalPeak)
+    public void dfs(ArrayList<Dot> peaksOfUser, Dot dot, Dot goalDot)
     {
-        if(peak.isVisited() && peak.equals(goalPeak))
+        if(dot.isVisited() && dot.equals(goalDot))
         {
             if(getQueue().size() > 3) {
-//            System.out.println("Goal peak was found");
+//            System.out.println("Goal dot was found");
                 isCycleFound = true;
             }
             return;
         }
-        if(peak.isVisited())
+        if(dot.isVisited())
         {
-//            System.out.println("Peak is already visited coordinate X: " + peak.getX() + " and Y: " + peak.getY());
+//            System.out.println("Dot is already visited coordinate X: " + dot.getX() + " and Y: " + dot.getY());
             if(!isCycleFound&& !queue.isEmpty())
             {
                 queue.removeLast().setVisited(false);
@@ -54,16 +52,16 @@ public class WideSearchAlgorithm {
             return;
         }
 
-        peak.setVisited(true);
-        queue.add(peak);
-//        System.out.println(peak.toString());
-        ArrayList<Peak> neighbours = this.getAllNeighbours(peaksOfUser, peak);
+        dot.setVisited(true);
+        queue.add(dot);
+//        System.out.println(dot.toString());
+        ArrayList<Dot> neighbours = this.getAllNeighbours(peaksOfUser, dot);
 
-        for(Peak neighbour : neighbours)
+        for(Dot neighbour : neighbours)
         {
             if(!isCycleFound)
             {
-                dfs(peaksOfUser, neighbour, goalPeak);
+                dfs(peaksOfUser, neighbour, goalDot);
             }
             else
             {
@@ -71,7 +69,7 @@ public class WideSearchAlgorithm {
             }
         }
 
-        if(!isCycleFound&&peak.isNeighbour(goalPeak))
+        if(!isCycleFound&& dot.isNeighbour(goalDot))
         {
             if(getQueue().size() > 3) {
             System.out.println("!!!!We have find chain!!! " + getQueue().toString());

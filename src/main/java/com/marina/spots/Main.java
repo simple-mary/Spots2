@@ -31,7 +31,7 @@ public class Main {
         {
 
 //            setRandomSpot(user);
-            ArrayList<Queue<Peak>> cycles = findAllCycles(user, setRandomSpot(user));
+            ArrayList<Queue<Dot>> cycles = findAllCycles(user, setRandomSpot(user));
             if (!cycles.isEmpty()){
                 field.printField();
                 System.out.println(cycles.toString());
@@ -57,16 +57,16 @@ public class Main {
 
     }
 
-    private static ArrayList<Queue<Peak>> findAllCycles(String player, Peak peak) {
-        ArrayList<Peak> peaks = field.getUserPeaks(SpotValues.valueOf(player));
-        ArrayList<Queue<Peak>> cycles = new ArrayList<Queue<Peak>>();
-//        for (Peak peak : peaks)
+    private static ArrayList<Queue<Dot>> findAllCycles(String player, Dot dot) {
+        ArrayList<Dot> dots = field.getUserPeaks(DotValues.valueOf(player));
+        ArrayList<Queue<Dot>> cycles = new ArrayList<Queue<Dot>>();
+//        for (Dot dot : dots)
 //        {
-//            System.out.println("Begin search from peak with X: "
-//                    + peak.getX() + " and Y :" + peak.getY());
-            peak.clear(peaks);
+//            System.out.println("Begin search from dot with X: "
+//                    + dot.getX() + " and Y :" + dot.getY());
+            dot.clear(dots);
             WideSearchAlgorithm algorithm = new WideSearchAlgorithm();
-            algorithm.dfs(peaks, peak, peak);
+            algorithm.dfs(dots, dot, dot);
             if (algorithm.isCycleFound()) {
                 cycles.add(algorithm.getQueue());
 //            }
@@ -74,7 +74,7 @@ public class Main {
         return cycles;
     }
 
-    private static Peak setRandomSpot(String user) {
+    private static Dot setRandomSpot(String user) {
         try {
             JSONObject jsonObject = new JSONObject();
             Random random = new Random();
@@ -84,7 +84,7 @@ public class Main {
             jsonObject.put("x", x);
             jsonObject.put("y", y);
             field.setSpot(jsonObject);
-            return new Peak(x, y, SpotValues.valueOf(user));
+            return new Dot(x, y, DotValues.valueOf(user));
         }
         catch (IllegalArgumentException p_ex)
         {

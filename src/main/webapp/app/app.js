@@ -60,15 +60,15 @@ app.service("ChatService", function($q, $timeout) {
     return listener.promise;
   };
 
-  service.send = function(message) {
-    var id = Math.floor(Math.random() * 1000000);
+  service.send = function(x, y, dotValues) {
     socket.stomp.send(service.CHAT_BROKER, {
       priority: 9
     }, JSON.stringify({
-      message: message,
-      id: id
+      x: x,
+      y: y,
+      dotValues: dotValues
     }));
-    messageIds.push(id);
+    // messageIds.push(id);
   };
 
   var reconnect = function() {
@@ -129,7 +129,9 @@ app.controller('myCtrl', function ($scope, ChatService) {
     console.log(e.clientX +' :  '+e.clientY);
     var context = $('#canvas')[0].getContext("2d");
     if(isClickOnPoint(e.clientX, e.clientY, $scope.context)) {
-      ChatService.send("456");
+      xn=Math.floor((e.clientX+r)/delta);
+      yn=Math.floor((e.clientY+r)/delta);
+      ChatService.send(xn,yn,"P1");
     }
   };
   $scope.drawBoard = function () {
