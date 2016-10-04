@@ -11,6 +11,7 @@ var delta = 40;
 var cw = bw + (p * 2) + 1;
 var ch = bh + (p * 2) + 1;
 var color = '';
+var user = '';
 
 function getColor() {
   if(color != null) {
@@ -92,20 +93,35 @@ app.service("ChatService", function($q, $timeout) {
     }, this.RECONNECT_TIMEOUT);
   };
 
-  var getMessage = function(data) {
-    var message = JSON.parse(data), out = {};
-    out.message = message.message;
-    out.time = new Date(message.time);
-    if (_.contains(messageIds, message.id)) {
+  var globalHandler = function(data) {
+    //1 занята ли точка
+    //2 перерисовка точек
+    //2.1 блокированные точки проставлять серым
+    //3 рисование циклов
+    var context = $('#canvas')[0].getContext("2d");
+    var varCycles = JSON.parse(data), out = {};
+
+    varCycles.forEach(function(cycle) {
+      context.moveTo(cycle[0].x*delta+p, cycle[0].y*delta+p);
+      cycle.forEach(function(item, i) {
+        console.log( i + ": " + item.x + ", " + item.y);
+        context.lineTo(0.5 + item.x*delta + p, item.y*delta + p);
+        context.moveTo(0.5 + item.x*delta + p, item.y*delta+p);
+        context.strokeStyle = "red";
+        context.stroke();
+      })});
+    out.m1essage = varCycles.message;
+    out.time = new Date(varCycles.time);
+    if (_.contains(messageIds, varCycles.id)) {
       out.self = true;
-      messageIds = _.remove(messageIds, message.id);
+      messageIds = _.remove(messageIds, varCycles.id);
     }
     return out;
   };
 
   var startListener = function() {
     socket.stomp.subscribe(service.CHAT_TOPIC, function(data) {
-      listener.notify(getMessage(data.body));
+      listener.notify(globalHandler(data.body));
     });
   };
 
@@ -146,7 +162,7 @@ app.controller('myCtrl', function ($scope, ChatService) {
     if(isClickOnPoint(e.clientX, e.clientY, $scope.context)) {
       xn=Math.floor((e.clientX+r)/delta);
       yn=Math.floor((e.clientY+r)/delta);
-      ChatService.send(xn,yn, "P1");
+      ChatService.send(xn,yn, user);
     }
   };
   $scope.drawBoard = function () {
@@ -154,7 +170,6 @@ app.controller('myCtrl', function ($scope, ChatService) {
     for (var x = 0; x <= bw; x += delta) {
       context.moveTo(0.5 + x + p, p);
       context.lineTo(0.5 + x + p, bh + p);
-
     }
 
     for (var x = 0; x <= bh; x += delta) {
@@ -178,13 +193,14 @@ app.controller('btnController', function ($scope) {
       setColor("red");
       $scope.Message = "Button clicked." + message;
       $scope.Color = "Color is " + getColor();
+      user = "P1";
     }
     else
     {
       setColor("blue");
       $scope.Color = "Color is " + getColor();
+      user = "P2";
     }
-
   }
 });
 

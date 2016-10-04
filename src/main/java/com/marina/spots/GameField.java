@@ -187,7 +187,7 @@ public class GameField
         }
     }
 
-    public void paintAllCycles(ArrayList<Queue<Dot>> arrayList)
+    public Queue<Dot> paintAllCyclesAndReturnUnique(ArrayList<Queue<Dot>> arrayList)
     {
         ArrayList<Queue<Dot>> cuted = getUniqueCycles(arrayList);
         for (Queue<Dot> p : cuted)
@@ -195,6 +195,12 @@ public class GameField
             System.out.println("start new cycle" + p);
             paintArea(p);
         }
+        return findMaxLengthCycle(cuted);
+    }
+
+    private Queue<Dot> findMaxLengthCycle(ArrayList<Queue<Dot>> cuted) {
+        //// TODO: 04.10.2016
+        return null;
     }
 
     public boolean isQueueHasSameElements(Queue<Dot> first, Queue<Dot> second)

@@ -1,13 +1,10 @@
 package com.marina.spots.config;
 
-import org.springframework.context.annotation.*;
-import org.springframework.stereotype.Controller;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ComponentScan(basePackages = "com.marina.spots", excludeFilters = {
-    @ComponentScan.Filter(value = Controller.class, type = FilterType.ANNOTATION),
-    @ComponentScan.Filter(value = Configuration.class, type = FilterType.ANNOTATION)
-})
+@ComponentScan(basePackages = "com.marina.spots")
 public class AppConfig {
 
 }

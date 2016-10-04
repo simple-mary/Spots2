@@ -15,7 +15,7 @@ public class WideSearchAlgorithm {
 
     private boolean isCycleFound = false;
 
-    public Deque getQueue() {
+    public Deque<Dot> getQueue() {
         return queue;
     }
 

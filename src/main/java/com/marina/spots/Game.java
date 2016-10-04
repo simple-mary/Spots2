@@ -4,7 +4,10 @@ import com.marina.spots.dto.DotDTO;
 import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Queue;
 
 /**
@@ -13,9 +16,19 @@ import java.util.Queue;
 @Controller
 public class Game {
 
-    public static int fieldSize = 20;
-    private static final GameField field = new GameField(fieldSize);
+    public int fieldSize = 20;
 
+    public GameField getField() {
+        return field;
+    }
+
+    private final GameField field = new GameField(fieldSize);
+
+    @PostConstruct
+    private void init()
+    {
+        field.initializeField();
+    }
 
     public static JSONObject generateJsonObject(String x, String y, String user) {
         JSONObject jsonObject = new JSONObject();
@@ -26,27 +39,29 @@ public class Game {
         return jsonObject;
     }
 
-    public boolean game(DotDTO dotDto) throws InterruptedException {
+    public List<Queue<Dot>> game(DotDTO dotDto)  {
         boolean isCycleFound = false;
-        field.initializeField();
         String user = dotDto.getDotValues().getValue();
-        while (!isFinish()) {
+//        while (!isFinish()) {
 
 //            setRandomSpot(user);
             field.setSpot(dotDto);
             ArrayList<Queue<Dot>> cycles = findAllCycles(user, new Dot(dotDto));
-            if (!cycles.isEmpty()) {
+            if (!cycles.isEmpty())
+            {
                 isCycleFound = true;
                 field.printField();
                 System.out.println(cycles.toString());
-                field.paintAllCycles(cycles);
+                someVar = field.paintAllCyclesAndReturnUnique(cycles);
+                globalListWithAllFoundCycle.add(someVar)
+                return globalListWithAllFoundCycle;
             }
-        }
+//        }
 
-        return isCycleFound;
+        return Collections.emptyList();
     }
 
-    private static ArrayList<Queue<Dot>> findAllCycles(String player, Dot dot) {
+    private ArrayList<Queue<Dot>> findAllCycles(String player, Dot dot) {
         ArrayList<Dot> dots = field.getUserDots(dot.getDotValues());
         ArrayList<Queue<Dot>> cycles = new ArrayList<Queue<Dot>>();
         dot.clear(dots);
@@ -55,6 +70,7 @@ public class Game {
         if (algorithm.isCycleFound()) {
             cycles.add(algorithm.getQueue());
         }
+
         return cycles;
     }
 
@@ -74,7 +90,7 @@ public class Game {
 //        }
 //    }
 
-    public static boolean isFinish() {
+    public boolean isFinish() {
         int i = field.countEmptyFields();
         if (i <= (Math.pow(fieldSize - 2, 2) * 30 / 100)) {
             return true;
