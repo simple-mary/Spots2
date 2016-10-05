@@ -36,6 +36,15 @@ public class GameField
         this.setFieldSize(fieldSize);
     }
 
+    Comparator<Queue> queueSizeComparator = new Comparator<Queue>()
+    {
+        @Override
+        public int compare(Queue o1, Queue o2)
+        {
+            return Integer.compare(o1.size(), o2.size());
+        }
+    };
+
     public void initializeField()
     {
         int size = getFieldSize();
@@ -199,8 +208,9 @@ public class GameField
     }
 
     private Queue<Dot> findMaxLengthCycle(ArrayList<Queue<Dot>> cuted) {
-        //// TODO: 04.10.2016
-        return null;
+
+        Collections.sort(cuted, queueSizeComparator);
+        return cuted.get(cuted.size());
     }
 
     public boolean isQueueHasSameElements(Queue<Dot> first, Queue<Dot> second)

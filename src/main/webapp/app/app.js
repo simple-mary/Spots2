@@ -98,6 +98,8 @@ app.service("ChatService", function($q, $timeout) {
     //2 перерисовка точек
     //2.1 блокированные точки проставлять серым
     //3 рисование циклов
+
+
     var context = $('#canvas')[0].getContext("2d");
     var varCycles = JSON.parse(data), out = {};
 

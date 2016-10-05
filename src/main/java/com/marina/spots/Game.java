@@ -23,6 +23,7 @@ public class Game {
     }
 
     private final GameField field = new GameField(fieldSize);
+    public ArrayList<Queue<Dot>> globalListWithAllFoundCycle = new ArrayList<Queue<Dot>>();
 
     @PostConstruct
     private void init()
@@ -40,7 +41,6 @@ public class Game {
     }
 
     public List<Queue<Dot>> game(DotDTO dotDto)  {
-        boolean isCycleFound = false;
         String user = dotDto.getDotValues().getValue();
 //        while (!isFinish()) {
 
@@ -49,11 +49,10 @@ public class Game {
             ArrayList<Queue<Dot>> cycles = findAllCycles(user, new Dot(dotDto));
             if (!cycles.isEmpty())
             {
-                isCycleFound = true;
                 field.printField();
                 System.out.println(cycles.toString());
-                someVar = field.paintAllCyclesAndReturnUnique(cycles);
-                globalListWithAllFoundCycle.add(someVar)
+                Queue<Dot> uniqueCycle = field.paintAllCyclesAndReturnUnique(cycles);
+                globalListWithAllFoundCycle.add(uniqueCycle);
                 return globalListWithAllFoundCycle;
             }
 //        }
@@ -73,22 +72,6 @@ public class Game {
 
         return cycles;
     }
-
-//    private static Dot setRandomSpot(String user) {
-//        try {
-//            JSONObject jsonObject = new JSONObject();
-//            Random random = new Random();
-//            int x = random.nextInt(fieldSize - 1) + 1;
-//            int y = random.nextInt(fieldSize - 1) + 1;
-//            jsonObject.put("user", user);
-//            jsonObject.put("x", x);
-//            jsonObject.put("y", y);
-//            field.setSpot(jsonObject);
-//            return new Dot(x, y, DotValues.valueOf(user));
-//        } catch (IllegalArgumentException p_ex) {
-//            return setRandomSpot(user);
-//        }
-//    }
 
     public boolean isFinish() {
         int i = field.countEmptyFields();
