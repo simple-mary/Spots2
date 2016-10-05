@@ -210,7 +210,7 @@ public class GameField
     private Queue<Dot> findMaxLengthCycle(ArrayList<Queue<Dot>> cuted) {
 
         Collections.sort(cuted, queueSizeComparator);
-        return cuted.get(cuted.size());
+        return cuted.get(cuted.size()-1);
     }
 
     public boolean isQueueHasSameElements(Queue<Dot> first, Queue<Dot> second)

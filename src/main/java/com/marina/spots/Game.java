@@ -42,9 +42,6 @@ public class Game {
 
     public List<Queue<Dot>> game(DotDTO dotDto)  {
         String user = dotDto.getDotValues().getValue();
-//        while (!isFinish()) {
-
-//            setRandomSpot(user);
             field.setSpot(dotDto);
             ArrayList<Queue<Dot>> cycles = findAllCycles(user, new Dot(dotDto));
             if (!cycles.isEmpty())
@@ -55,8 +52,6 @@ public class Game {
                 globalListWithAllFoundCycle.add(uniqueCycle);
                 return globalListWithAllFoundCycle;
             }
-//        }
-
         return Collections.emptyList();
     }
 

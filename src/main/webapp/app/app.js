@@ -101,8 +101,60 @@ app.service("ChatService", function($q, $timeout) {
 
 
     var context = $('#canvas')[0].getContext("2d");
-    var varCycles = JSON.parse(data), out = {};
+    // var varCycles = JSON.parse(data), out = {};
 
+    var allData = JSON.parse(data);
+    if(allData.free != true) {
+      console.log("Dot is not free");
+      return;
+    }
+
+    var gameField = allData.gameField;
+    var fieldPoint = gameField.fieldPoints;
+
+    var fieldPoint = gameField.fieldPoints;
+    fieldPoint.forEach(function(points)
+    {
+      points.forEach(function(point) {
+        console.log(point.value);
+      })
+    })
+    var count = 0;
+    for(var i=0; i<fieldPoint.length; i++)
+    {
+      for (var j=0; j<fieldPoint.length; j++)
+      {
+        count++;
+        console.log(count);
+        var val = fieldPoint[i][j].value;
+        if (val == "F")
+        {
+          point(i*delta+p, j*delta+p, context, "black")
+        }
+        if (val == "P1")
+        {
+          point(i*delta+p, j*delta+p, context, "red")
+        }
+        if (val == "P2")
+        {
+          point(i*delta+p, j*delta+p, context, "blue")
+        }
+        if (val == "B1" || val == "B2")
+        {
+          point(i*delta+p, j*delta+p, context, "grey")
+        }
+        if (val == "C1")
+        {
+          point(i*delta+p, j*delta+p, context, "yellow")
+        }
+        if (val == "C2")
+        {
+          point(i*delta+p, j*delta+p, context, "green")
+        }
+      }
+    }
+
+    var varCycles = allData.allCyclesToDraw;
     varCycles.forEach(function(cycle) {
       context.moveTo(cycle[0].x*delta+p, cycle[0].y*delta+p);
       cycle.forEach(function(item, i) {
