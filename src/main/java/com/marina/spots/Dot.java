@@ -7,7 +7,7 @@ import java.util.ArrayList;
 /**
  * Created by Marry on 21.09.2016.
  */
-public class Dot {
+public class Dot implements Comparable<Dot>{
 
     private int x;
     private int y;
@@ -103,5 +103,29 @@ public class Dot {
         result = 31 * result + y;
         result = 31 * result + dotValues.hashCode();
         return result;
+    }
+
+    @Override
+    public int compareTo(Dot o) {
+        if(this.getX() > o.getX())
+        {
+            return 1;
+        }
+        else if(this.getX() < o.getX())
+        {
+            return -1;
+        }
+        else
+        {
+            if(this.getY() > o.getY())
+            {
+                return 1;
+            }
+            else if(this.getY() < o.getY())
+            {
+                return -1;
+            }
+        }
+        return 0;
     }
 }

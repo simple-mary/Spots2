@@ -1,14 +1,10 @@
 package com.marina.spots;
 
 import com.marina.spots.dto.DotDTO;
-import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * Created by Marry on 19.09.2016.
@@ -16,7 +12,7 @@ import java.util.Queue;
 @Controller
 public class Game {
 
-    public int fieldSize = 20;
+    public int fieldSize = 15;
 
     public GameField getField() {
         return field;
@@ -31,16 +27,7 @@ public class Game {
         field.initializeField();
     }
 
-    public static JSONObject generateJsonObject(String x, String y, String user) {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("x", x);
-        jsonObject.put("y", y);
-        jsonObject.put("user", user);
-        jsonObject.put("session", "900");
-        return jsonObject;
-    }
-
-    public List<Queue<Dot>> game(DotDTO dotDto)  {
+     public List<Queue<Dot>> game(DotDTO dotDto)  {
         String user = dotDto.getDotValues().getValue();
             field.setSpot(dotDto);
             ArrayList<Queue<Dot>> cycles = findAllCycles(user, new Dot(dotDto));
@@ -50,13 +37,16 @@ public class Game {
                 System.out.println(cycles.toString());
                 Queue<Dot> uniqueCycle = field.paintAllCyclesAndReturnUnique(cycles);
                 globalListWithAllFoundCycle.add(uniqueCycle);
-                return globalListWithAllFoundCycle;
             }
-        return Collections.emptyList();
+        return globalListWithAllFoundCycle;
     }
 
     private ArrayList<Queue<Dot>> findAllCycles(String player, Dot dot) {
-        ArrayList<Dot> dots = field.getUserDots(dot.getDotValues());
+        Collection<Dot> uniqueDots = new HashSet<>(field.getUserDots(dot.getDotValues()));
+        uniqueDots.remove(dot);
+        uniqueDots.add(dot);
+        ArrayList<Dot>dots = new ArrayList<>(uniqueDots);
+        Collections.sort(dots);
         ArrayList<Queue<Dot>> cycles = new ArrayList<Queue<Dot>>();
         dot.clear(dots);
         WideSearchAlgorithm algorithm = new WideSearchAlgorithm();

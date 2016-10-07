@@ -1,29 +1,33 @@
 var app = angular.module('myApp', []);
 
 //grid width and height
-var bw = 400;
-var bh = 400;
+var bw = 600;
+var bh = 600;
 //padding around grid
-var p = 0;
-var r = 5;
+var p = 10;
+var r = 6;
 var delta = 40;
 //size of canvas
 var cw = bw + (p * 2) + 1;
 var ch = bh + (p * 2) + 1;
 var color = '';
 var user = '';
+var isFinish = false;
 
 function getColor() {
-  if(color != null) {
-    return color;
-  }
-  else {
-    return color = "red";
-  }
+ return color;
 }
 
-function setColor(color) {
-  this.color = color;
+function setColor(string) {
+  if(string=="P1")
+  {
+    this.color = "red";
+  }
+  else
+  {
+    this.color = "blue";
+  }
+
 }
 
 function point(x, y, context, color){
@@ -34,23 +38,19 @@ function point(x, y, context, color){
 }
 
 function drawPoints(context) {
-  for (var x = 0; x <= bw; x += delta) {
-    for (var y = 0; y <= bh; y += delta) {
-      //var pointCanvas = $('<canvas/>').appendTo(canvas);
-
-      // var pointContext = canvas.get(0).getContext("2d");
+  for (var x = 0; x < bw; x += delta) {
+    for (var y = 0; y < bh; y += delta) {
       point(x + p, y + p, context);
     }
   }
 }
 
-function isClickOnPoint(x,y, context)
+function isClickOnPoint(x,y)
 {
   xn=Math.floor((x+r)/delta)*delta;
   yn=Math.floor((y+r)/delta)*delta;
-  if((xn-r<=x && xn+r>=x) && (yn-r<=y && y<=yn+r))
+  if((xn-r+p<=x && xn+r+p>=x) && (yn-r+p<=y && y<=yn+r+p))
   {
-    point(xn, yn, context, getColor());
     console.log(true);
     return true;
   }
@@ -60,17 +60,24 @@ function isClickOnPoint(x,y, context)
 }
 
 
-app.service("ChatService", function($q, $timeout) {
+function getColorByUser(owner) {
+  if(owner == "P1")
+  {
+    return "red";
+  }
+  return "blue";
+}
+app.service("FieldService", function($q, $timeout) {
 
   var service = {}, listener = $q.defer(), socket = {
     client: null,
     stomp: null
-  }, messageIds = [];
+  };
 
   service.RECONNECT_TIMEOUT = 30000;
-  service.SOCKET_URL = "/spring-ng-dots/chat";
-  service.CHAT_TOPIC = "/topic/message";
-  service.CHAT_BROKER = "/app/chat";
+  service.SOCKET_URL = "/spring-ng-dots/dots";
+  service.CHAT_TOPIC = "/field/action";
+  service.CHAT_BROKER = "/app/dots";
 
   service.receive = function() {
     return listener.promise;
@@ -84,7 +91,6 @@ app.service("ChatService", function($q, $timeout) {
       y: y,
       dotValues: dotValues
     }));
-    // messageIds.push(id);
   };
 
   var reconnect = function() {
@@ -94,16 +100,23 @@ app.service("ChatService", function($q, $timeout) {
   };
 
   var globalHandler = function(data) {
-    //1 занята ли точка
-    //2 перерисовка точек
-    //2.1 блокированные точки проставлять серым
-    //3 рисование циклов
-
-
     var context = $('#canvas')[0].getContext("2d");
-    // var varCycles = JSON.parse(data), out = {};
 
     var allData = JSON.parse(data);
+
+    if(allData.finish)
+    {
+      if(allData.scorePlayer1 == allData.scorePlayer2)
+      {
+        alert("DEAD HEAT");
+      }
+      else {
+        alert("The game is over! The winner is " +
+        allData.scorePlayer1 > allData.scorePlayer2 ? "PLAYER 1" : "PLAYER 2");
+      }
+      return;
+    }
+
     if(allData.free != true) {
       console.log("Dot is not free");
       return;
@@ -111,14 +124,6 @@ app.service("ChatService", function($q, $timeout) {
 
     var gameField = allData.gameField;
     var fieldPoint = gameField.fieldPoints;
-
-    var fieldPoint = gameField.fieldPoints;
-    fieldPoint.forEach(function(points)
-    {
-      points.forEach(function(point) {
-        console.log(point.value);
-      })
-    })
     var count = 0;
     for(var i=0; i<fieldPoint.length; i++)
     {
@@ -131,23 +136,23 @@ app.service("ChatService", function($q, $timeout) {
         {
           point(i*delta+p, j*delta+p, context, "black")
         }
-        if (val == "P1")
+        else if (val == "P1")
         {
           point(i*delta+p, j*delta+p, context, "red")
         }
-        if (val == "P2")
+        else if (val == "P2")
         {
           point(i*delta+p, j*delta+p, context, "blue")
         }
-        if (val == "B1" || val == "B2")
+        else if (val == "B1" || val == "B2")
         {
           point(i*delta+p, j*delta+p, context, "grey")
         }
-        if (val == "C1")
+        else if (val == "C1")
         {
           point(i*delta+p, j*delta+p, context, "yellow")
         }
-        if (val == "C2")
+        else if (val == "C2")
         {
           point(i*delta+p, j*delta+p, context, "green")
         }
@@ -156,26 +161,31 @@ app.service("ChatService", function($q, $timeout) {
 
     var varCycles = allData.allCyclesToDraw;
     varCycles.forEach(function(cycle) {
-      context.moveTo(cycle[0].x*delta+p, cycle[0].y*delta+p);
+      context.beginPath();
+      context.moveTo(0.5 + cycle[0].x*delta+p, cycle[0].y*delta+p);
       cycle.forEach(function(item, i) {
         console.log( i + ": " + item.x + ", " + item.y);
         context.lineTo(0.5 + item.x*delta + p, item.y*delta + p);
         context.moveTo(0.5 + item.x*delta + p, item.y*delta+p);
-        context.strokeStyle = "red";
+        context.lineWidth = 2;
+        context.strokeStyle = getColorByUser(item.dotValues.value);
         context.stroke();
-      })});
-    out.m1essage = varCycles.message;
-    out.time = new Date(varCycles.time);
-    if (_.contains(messageIds, varCycles.id)) {
-      out.self = true;
-      messageIds = _.remove(messageIds, varCycles.id);
-    }
-    return out;
+      });
+      context.lineTo(0.5 + cycle[0].x*delta+p, cycle[0].y*delta+p);
+      context.lineWidth = 2;
+      context.strokeStyle = getColorByUser(cycle[0].dotValues.value);
+      context.stroke();
+    });
+
+    var score = $('#score')[0];
+    score.textContent=allData.scorePlayer1 + " : " + allData.scorePlayer2;
+
   };
 
   var startListener = function() {
     socket.stomp.subscribe(service.CHAT_TOPIC, function(data) {
-      listener.notify(globalHandler(data.body));
+      // listener.notify(globalHandler(data.body));
+      globalHandler(data.body);
     });
   };
 
@@ -190,25 +200,23 @@ app.service("ChatService", function($q, $timeout) {
   return service;
 });
 
-
-app.controller("ChatCtrl", function($scope, ChatService) {
+app.controller("ChatCtrl", function($scope, FieldService) {
   $scope.messages = [];
   $scope.message = "";
   $scope.max = 140;
 
   $scope.addMessage = function() {
-    ChatService.send($scope.message);
+    FieldService.send($scope.message);
     $scope.message = "";
   };
 
-  ChatService.receive().then(null, null, function(message) {
+  FieldService.receive().then(null, null, function(message) {
     $scope.messages.push(message);
   });
 });
 
-app.controller('myCtrl', function ($scope, ChatService) {
+app.controller('myCtrl', function ($scope, FieldService) {
 
-  console.log("HI");
   $scope.context = $('#canvas')[0].getContext("2d");
   $scope.doClick = function(e){
     console.log(e.clientX +' :  '+e.clientY);
@@ -216,19 +224,19 @@ app.controller('myCtrl', function ($scope, ChatService) {
     if(isClickOnPoint(e.clientX, e.clientY, $scope.context)) {
       xn=Math.floor((e.clientX+r)/delta);
       yn=Math.floor((e.clientY+r)/delta);
-      ChatService.send(xn,yn, user);
+      FieldService.send(xn,yn, user);
     }
   };
   $scope.drawBoard = function () {
     var context = $scope.context;
-    for (var x = 0; x <= bw; x += delta) {
+    for (var x = 0; x < bw; x += delta) {
       context.moveTo(0.5 + x + p, p);
-      context.lineTo(0.5 + x + p, bh + p);
+      context.lineTo(0.5 + x + p, bh + p-delta);
     }
 
-    for (var x = 0; x <= bh; x += delta) {
+    for (var x = 0; x < bh; x += delta) {
       context.moveTo(p, 0.5 + x + p);
-      context.lineTo(bw + p, 0.5 + x + p);
+      context.lineTo(bw + p-delta, 0.5 + x + p);
     }
 
     context.strokeStyle = "black";
@@ -238,24 +246,20 @@ app.controller('myCtrl', function ($scope, ChatService) {
   };
 });
 
-
 app.controller('btnController', function ($scope) {
-  $scope.ButtonClick = function (message) {
+  $scope.ButtonClick = function (string) {
+    if(string == "Finish")
+    {
+      $scope.Message="The game is over!";
+      isFinish=true;
 
-    if(message === "P1" )
-    {
-      setColor("red");
-      $scope.Message = "Button clicked." + message;
-      $scope.Color = "Color is " + getColor();
-      user = "P1";
     }
-    else
-    {
-      setColor("blue");
-      $scope.Color = "Color is " + getColor();
-      user = "P2";
+    else {
+      user = string;
+      setColor(string);
+      $scope.Message = "Button clicked!";
+      $scope.Color = "Your color is " + getColor(string);
     }
-  }
-});
+}});
 
 

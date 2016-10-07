@@ -30,23 +30,32 @@ public class MessageController {
         return "index";
     }
 
-    @MessageMapping("/chat")
-    @SendTo("/topic/message")
+    @MessageMapping("/dots")
+    @SendTo("/field/action")
     public OutputMessage sendMessage(DotDTO dotDTO) {
         logger.info("DotDTO sent");
         OutputMessage outputMessage = new OutputMessage();
-        outputMessage.setFree(DotValues.FREE.equals(game.getField().fieldPoints[dotDTO.getX()][dotDTO.getY()]));
-        if (outputMessage.isFree()) {
-            List<Queue<Dot>> cycles = game.game(dotDTO);
-            outputMessage.setAllCyclesToDraw(cycles);
-            outputMessage.setGameField(game.getField());
-        }
+//        if (isFinish) {
+//            outputMessage.setFinish(true);
+//            outputMessage.setScorePlayer1(game.getField().computeCapturedDots(DotValues.PLAYER1));
+//            outputMessage.setScorePlayer2(game.getField().computeCapturedDots(DotValues.PLAYER2));
+//        } else {
+            outputMessage.setFree(DotValues.FREE.equals(game.getField().fieldPoints[dotDTO.getX()][dotDTO.getY()]));
+            if (outputMessage.isFree()) {
+                List<Queue<Dot>> cycles = game.game(dotDTO);
+                outputMessage.setAllCyclesToDraw(cycles);
+                outputMessage.setGameField(game.getField());
+                outputMessage.setScorePlayer1(game.getField().computeCapturedDots(DotValues.PLAYER1));
+                outputMessage.setScorePlayer2(game.getField().computeCapturedDots(DotValues.PLAYER2));
+            }
+//        }
         return outputMessage;
     }
 
-    @MessageMapping("/try-to-set")
-    @SendTo("/topic/points")
-    public boolean tryToSetPoint(DotDTO dotDTO) {
-        return DotValues.FREE.equals(game.getField().fieldPoints[dotDTO.getX()][dotDTO.getY()]);
+    @MessageMapping("/finish")
+    @SendTo("/field/action")
+    public OutputMessage sendFinish(boolean isFinish)
+    {
+        return null;
     }
-}
+ }

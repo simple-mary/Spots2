@@ -15,27 +15,42 @@
 </head>
 
 <body ng-app="myApp" style="margin: 0px;">
-
-<div ng-controller="myCtrl" ng-init="drawBoard()">
-    <canvas id="canvas" width="401" height="401" ng-click="doClick($event)">
-    </canvas>
-</div>
-<div id="left" ng-controller="btnController" style="left: 515px;">
-    <input type="button" value="PLAYER1" ng-click="ButtonClick('P1')" id="P1"/>
-    <br>
-    <input type="button" value="PLAYER2" ng-click="ButtonClick('P2')" id="P2"/>
-    <br>
-    <input type="button" value="FINISH THE GAME" ng-click="ButtonClick('Finish')" id="Finish"/>
-    <br>
-    <input type="button" value="Click Me!" ng-click="ButtonClick('P1')" />
-    <br/>
-    <br/>
-    <span ng-bind="Message"></span>
-    <br/>
-    <br/>
-    <span ng-bind="Color"></span>
-    </div>
-
+<table>
+<tr>
+    <td>
+        <div ng-controller="myCtrl" ng-init="drawBoard()">
+            <canvas id="canvas" width="621" height="621" ng-click="doClick($event)">
+            </canvas>
+        </div>
+    </td>
+    <td>
+        <label style="font-size: large">Please choose player</label>
+        <div id="left" ng-controller="btnController" style="left: 515px;">
+            <br/>
+            <br/>
+            <input type="button" value="PLAYER1" ng-click="ButtonClick('P1')" id="P1"/>
+            <br>
+            <input type="button" value="PLAYER2" ng-click="ButtonClick('P2')" id="P2"/>
+            <br>
+            <input type="button" value="FINISH THE GAME" ng-click="ButtonClick('Finish')" id="Finish"/>
+            <br>
+            <br/>
+            <br/>
+            <span ng-bind="Message"></span>
+            <br/>
+            <br/>
+            <span ng-bind="Color"></span>
+            <br/>
+            <br/>
+            <label>SCORE</label>
+            <label>PLAYER 1 : PLAYER 2</label>
+            <br/>
+            <br/>
+            <span id="score"></span>
+        </div>
+    </td>
+<tr>
+</table>
 </body>
 
 
