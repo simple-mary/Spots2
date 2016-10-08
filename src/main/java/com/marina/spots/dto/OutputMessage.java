@@ -9,12 +9,21 @@ import java.util.Queue;
 
 public class OutputMessage extends DotDTO {
 
-	private boolean isFree;
+	private boolean isFree = true;
 	private GameField gameField;
 	private List<Queue<Dot>> allCyclesToDraw;
 	private int scorePlayer2;
 	private int scorePlayer1;
 	private boolean finish;
+    private boolean clear;
+
+    public boolean isClear() {
+        return clear;
+    }
+
+    public void setClear(boolean clear) {
+        this.clear = clear;
+    }
 
 	public boolean isFree() {
 		return isFree;

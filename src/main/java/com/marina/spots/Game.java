@@ -22,22 +22,21 @@ public class Game {
     public ArrayList<Queue<Dot>> globalListWithAllFoundCycle = new ArrayList<Queue<Dot>>();
 
     @PostConstruct
-    private void init()
-    {
+    public void init() {
         field.initializeField();
+        globalListWithAllFoundCycle.clear();
     }
 
-     public List<Queue<Dot>> game(DotDTO dotDto)  {
+    public List<Queue<Dot>> game(DotDTO dotDto) {
         String user = dotDto.getDotValues().getValue();
-            field.setSpot(dotDto);
-            ArrayList<Queue<Dot>> cycles = findAllCycles(user, new Dot(dotDto));
-            if (!cycles.isEmpty())
-            {
-                field.printField();
-                System.out.println(cycles.toString());
-                Queue<Dot> uniqueCycle = field.paintAllCyclesAndReturnUnique(cycles);
-                globalListWithAllFoundCycle.add(uniqueCycle);
-            }
+        field.setSpot(dotDto);
+        ArrayList<Queue<Dot>> cycles = findAllCycles(user, new Dot(dotDto));
+        if (!cycles.isEmpty()) {
+            field.printField();
+            System.out.println(cycles.toString());
+            Queue<Dot> uniqueCycle = field.paintAllCyclesAndReturnUnique(cycles);
+            globalListWithAllFoundCycle.add(uniqueCycle);
+        }
         return globalListWithAllFoundCycle;
     }
 
@@ -45,7 +44,7 @@ public class Game {
         Collection<Dot> uniqueDots = new HashSet<>(field.getUserDots(dot.getDotValues()));
         uniqueDots.remove(dot);
         uniqueDots.add(dot);
-        ArrayList<Dot>dots = new ArrayList<>(uniqueDots);
+        ArrayList<Dot> dots = new ArrayList<>(uniqueDots);
         Collections.sort(dots);
         ArrayList<Queue<Dot>> cycles = new ArrayList<Queue<Dot>>();
         dot.clear(dots);
@@ -60,14 +59,8 @@ public class Game {
 
     public boolean isFinish() {
         int i = field.countEmptyFields();
-        if (i <= (Math.pow(fieldSize - 2, 2) * 30 / 100)) {
-            return true;
-        }
-//        return !field.isEmptyFields();
-        return false;
+        return i == 0;
     }
-
-
 }
 
 

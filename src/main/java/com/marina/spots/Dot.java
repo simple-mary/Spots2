@@ -7,7 +7,7 @@ import java.util.ArrayList;
 /**
  * Created by Marry on 21.09.2016.
  */
-public class Dot implements Comparable<Dot>{
+public class Dot implements Comparable<Dot> {
 
     private int x;
     private int y;
@@ -52,8 +52,7 @@ public class Dot implements Comparable<Dot>{
         this.dotValues = dotValues;
     }
 
-    public Dot(DotDTO dotDTO)
-    {
+    public Dot(DotDTO dotDTO) {
         this.x = dotDTO.getX();
         this.y = dotDTO.getY();
         this.dotValues = dotDTO.getDotValues();
@@ -66,14 +65,14 @@ public class Dot implements Comparable<Dot>{
     }
 
     public boolean isNeighbour(Dot dot) {
-        if ((dot.getX() - 1 == this.getX() && dot.getY() == this.getY())
-                || (dot.getX() + 1 == this.getX() && dot.getY() == this.getY())
+        if ((dot.getY() + 1 == this.getY() && dot.getX() == this.getX())
+                || (dot.getX() - 1 == this.getX() && dot.getY() == this.getY())
                 || (dot.getY() - 1 == this.getY() && dot.getX() == this.getX())
-                || (dot.getY() + 1 == this.getY() && dot.getX() == this.getX())
-                || (dot.getX() + 1 == this.getX() && dot.getY() + 1 == this.getY())
-                || (dot.getX() + 1 == this.getX() && dot.getY() - 1 == this.getY())
+                || (dot.getX() + 1 == this.getX() && dot.getY() == this.getY())
                 || (dot.getX() - 1 == this.getX() && dot.getY() + 1 == this.getY())
-                || (dot.getX() - 1 == this.getX() && dot.getY() - 1 == this.getY())) {
+                || (dot.getX() - 1 == this.getX() && dot.getY() - 1 == this.getY())
+                || (dot.getX() + 1 == this.getX() && dot.getY() - 1 == this.getY())
+                || (dot.getX() + 1 == this.getX() && dot.getY() + 1 == this.getY())) {
             return true;
         }
         return false;
@@ -107,25 +106,22 @@ public class Dot implements Comparable<Dot>{
 
     @Override
     public int compareTo(Dot o) {
-        if(this.getX() > o.getX())
+        if(this.getY() > o.getY())
         {
             return 1;
         }
-        else if(this.getX() < o.getX())
+        else if(this.getY() < o.getY())
         {
             return -1;
         }
-        else
-        {
-            if(this.getY() > o.getY())
-            {
+        else {
+            if (this.getX() > o.getX()) {
                 return 1;
-            }
-            else if(this.getY() < o.getY())
-            {
+            } else if (this.getX() < o.getX()) {
                 return -1;
             }
         }
+
         return 0;
     }
 }

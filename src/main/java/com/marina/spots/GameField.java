@@ -231,4 +231,15 @@ public class GameField {
         }
         return i;
     }
+
+    public void blockAllFreeDots() {
+        for (int j = 0; j < fieldPoints.length; j++) {
+            for (int i = 0; i < fieldPoints.length; i++) {
+                if(fieldPoints[i][j].equals(DotValues.FREE))
+                {
+                    fieldPoints[i][j] = DotValues.BLOCK;
+                }
+            }
+        }
+    }
 }

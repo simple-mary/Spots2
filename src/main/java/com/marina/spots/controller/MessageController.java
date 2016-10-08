@@ -3,7 +3,8 @@ package com.marina.spots.controller;
 import com.marina.spots.Dot;
 import com.marina.spots.DotValues;
 import com.marina.spots.Game;
-import com.marina.spots.dto.DotDTO;
+import com.marina.spots.dto.Command;
+import com.marina.spots.dto.InputMessage;
 import com.marina.spots.dto.OutputMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,30 +33,39 @@ public class MessageController {
 
     @MessageMapping("/dots")
     @SendTo("/field/action")
-    public OutputMessage sendMessage(DotDTO dotDTO) {
-        logger.info("DotDTO sent");
+    public OutputMessage sendMessage(InputMessage inputMessage
+                                     /*, Session session, @PathParam("client-id") String clientId*/) {
         OutputMessage outputMessage = new OutputMessage();
-//        if (isFinish) {
-//            outputMessage.setFinish(true);
-//            outputMessage.setScorePlayer1(game.getField().computeCapturedDots(DotValues.PLAYER1));
-//            outputMessage.setScorePlayer2(game.getField().computeCapturedDots(DotValues.PLAYER2));
-//        } else {
-            outputMessage.setFree(DotValues.FREE.equals(game.getField().fieldPoints[dotDTO.getX()][dotDTO.getY()]));
-            if (outputMessage.isFree()) {
-                List<Queue<Dot>> cycles = game.game(dotDTO);
-                outputMessage.setAllCyclesToDraw(cycles);
-                outputMessage.setGameField(game.getField());
-                outputMessage.setScorePlayer1(game.getField().computeCapturedDots(DotValues.PLAYER1));
-                outputMessage.setScorePlayer2(game.getField().computeCapturedDots(DotValues.PLAYER2));
+        for (Command command : inputMessage.getManageCommands()) {
+            switch (command) {
+                case SET_DOT:
+                    outputMessage.setFree(DotValues.FREE.equals(game.getField()
+                            .fieldPoints[inputMessage.getDotDTO().getX()][inputMessage.getDotDTO().getY()]));
+                    if (outputMessage.isFree()) {
+                        List<Queue<Dot>> cycles = game.game(inputMessage.getDotDTO());
+                        outputMessage.setAllCyclesToDraw(cycles);
+                    }
+                    outputMessage.setFinish(game.isFinish());
+                    break;
+                case FINISH_GAME:
+                    outputMessage.setFinish(true);
+                    game.getField().blockAllFreeDots();
+                    break;
+                case GET_FIELD_STATE:
+                    outputMessage.setGameField(game.getField());
+                    break;
+                case GET_SCORE:
+                    outputMessage.setScorePlayer1(game.getField().computeCapturedDots(DotValues.PLAYER1));
+                    outputMessage.setScorePlayer2(game.getField().computeCapturedDots(DotValues.PLAYER2));
+                    break;
+                case NEW_GAME:
+                    game.init();
+                    outputMessage.setClear(true);
+                    break;
+                default:
+                    throw new IllegalArgumentException("No such command " + command);
             }
-//        }
+        }
         return outputMessage;
     }
-
-    @MessageMapping("/finish")
-    @SendTo("/field/action")
-    public OutputMessage sendFinish(boolean isFinish)
-    {
-        return null;
-    }
- }
+}

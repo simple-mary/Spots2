@@ -14,6 +14,7 @@ public enum DotValues {
     EDGE("E"),
     BLOCK1("B1"),
     BLOCK2("B2"),
+    BLOCK("B"),
     CAPTURED_BY_PLAYER1("C1"),
     CAPTURED_BY_PLAYER2("C2");
 

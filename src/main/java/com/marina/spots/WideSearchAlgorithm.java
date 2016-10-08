@@ -19,14 +19,48 @@ public class WideSearchAlgorithm {
         return queue;
     }
 
-    public ArrayList<Dot> getAllNeighbours(ArrayList<Dot> dots, Dot currentDot) {
-        ArrayList<Dot> list = new ArrayList<Dot>();
+    public List<Dot> getAllNeighbours(ArrayList<Dot> dots, Dot currentDot) {
+        ArrayList<Dot> list = new ArrayList<>();
         for (Dot dot : dots) {
             if (currentDot.isNeighbour(dot) && !dot.isVisited()) {
                 list.add(dot);
             }
         }
-        return list;
+        List<Dot> result = new ArrayList<>(8);
+        for (int i = 0; i < 8; i++) {
+            result.add(null);
+        }
+        for (Dot dot : list) {
+            if (dot.getY() + 1 == currentDot.getY() && dot.getX() == currentDot.getX()) {
+                result.set(0, dot);
+            }
+            if (dot.getY() == currentDot.getY() && dot.getX() - 1 == currentDot.getX()) {
+                result.set(1, dot);
+            }
+            if (dot.getY() - 1 == currentDot.getY() && dot.getX() == currentDot.getX()) {
+                result.set(2, dot);
+            }
+            if (dot.getY() == currentDot.getY() && dot.getX() + 1 == currentDot.getX()) {
+                result.set(3, dot);
+            }
+            if (dot.getY() + 1 == currentDot.getY() && dot.getX() - 1 == currentDot.getX()) {
+                result.set(4, dot);
+            }
+
+            if (dot.getY() - 1 == currentDot.getY() && dot.getX() - 1 == currentDot.getX()) {
+                result.set(5, dot);
+            }
+
+            if (dot.getY() - 1 == currentDot.getY() && dot.getX() + 1 == currentDot.getX()) {
+                result.set(6, dot);
+            }
+
+            if (dot.getY() + 1 == currentDot.getY() && dot.getX() + 1 == currentDot.getX()) {
+                result.set(7, dot);
+            }
+        }
+        result.removeAll(Collections.singletonList(null));
+        return result;
     }
 
     public void dfs(ArrayList<Dot> peaksOfUser, Dot dot, Dot goalDot) {
@@ -45,7 +79,7 @@ public class WideSearchAlgorithm {
 
         dot.setVisited(true);
         queue.add(dot);
-        ArrayList<Dot> neighbours = this.getAllNeighbours(peaksOfUser, dot);
+        List<Dot> neighbours = this.getAllNeighbours(peaksOfUser, dot);
 
         for (Dot neighbour : neighbours) {
             if (!isCycleFound) {

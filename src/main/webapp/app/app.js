@@ -7,12 +7,9 @@ var bh = 600;
 var p = 10;
 var r = 6;
 var delta = 40;
-//size of canvas
-var cw = bw + (p * 2) + 1;
-var ch = bh + (p * 2) + 1;
+
 var color = '';
 var user = '';
-var isFinish = false;
 
 function getColor() {
  return color;
@@ -67,6 +64,33 @@ function getColorByUser(owner) {
   }
   return "blue";
 }
+function reInitField(allData, context) {
+  var gameField = allData.gameField;
+  var fieldPoint = gameField.fieldPoints;
+  for (var i = 0; i < fieldPoint.length; i++) {
+    for (var j = 0; j < fieldPoint.length; j++) {
+      var val = fieldPoint[i][j].value;
+      if (val == "F") {
+        point(i * delta + p, j * delta + p, context, "black")
+      }
+      else if (val == "P1") {
+        point(i * delta + p, j * delta + p, context, "red")
+      }
+      else if (val == "P2") {
+        point(i * delta + p, j * delta + p, context, "blue")
+      }
+      else if (val == "B1" || val == "B2" || val == "B") {
+        point(i * delta + p, j * delta + p, context, "grey")
+      }
+      else if (val == "C1") {
+        point(i * delta + p, j * delta + p, context, "yellow")
+      }
+      else if (val == "C2") {
+        point(i * delta + p, j * delta + p, context, "green")
+      }
+    }
+  }
+}
 app.service("FieldService", function($q, $timeout) {
 
   var service = {}, listener = $q.defer(), socket = {
@@ -76,20 +100,23 @@ app.service("FieldService", function($q, $timeout) {
 
   service.RECONNECT_TIMEOUT = 30000;
   service.SOCKET_URL = "/spring-ng-dots/dots";
-  service.CHAT_TOPIC = "/field/action";
-  service.CHAT_BROKER = "/app/dots";
+  service.GAME_TOPIC = "/field/action";
+  service.GAME_BROKER = "/app/dots";
 
   service.receive = function() {
     return listener.promise;
   };
 
-  service.send = function(x, y, dotValues) {
-    socket.stomp.send(service.CHAT_BROKER, {
+  service.send = function (commands, user, x, y, dotValues) {
+    var dotDto = {x: x,
+      y: y,
+      dotValues: dotValues};
+    socket.stomp.send(service.GAME_BROKER, {
       priority: 9
     }, JSON.stringify({
-      x: x,
-      y: y,
-      dotValues: dotValues
+      manageCommands: commands,
+      user: user,
+      dotDTO: dotDto
     }));
   };
 
@@ -103,7 +130,11 @@ app.service("FieldService", function($q, $timeout) {
     var context = $('#canvas')[0].getContext("2d");
 
     var allData = JSON.parse(data);
-
+    reInitField(allData, context);
+    if(allData.free != true) {
+      console.log("Dot is not free");
+      return;
+    }
     if(allData.finish)
     {
       if(allData.scorePlayer1 == allData.scorePlayer2)
@@ -117,46 +148,9 @@ app.service("FieldService", function($q, $timeout) {
       return;
     }
 
-    if(allData.free != true) {
-      console.log("Dot is not free");
-      return;
-    }
-
-    var gameField = allData.gameField;
-    var fieldPoint = gameField.fieldPoints;
-    var count = 0;
-    for(var i=0; i<fieldPoint.length; i++)
-    {
-      for (var j=0; j<fieldPoint.length; j++)
-      {
-        count++;
-        console.log(count);
-        var val = fieldPoint[i][j].value;
-        if (val == "F")
-        {
-          point(i*delta+p, j*delta+p, context, "black")
-        }
-        else if (val == "P1")
-        {
-          point(i*delta+p, j*delta+p, context, "red")
-        }
-        else if (val == "P2")
-        {
-          point(i*delta+p, j*delta+p, context, "blue")
-        }
-        else if (val == "B1" || val == "B2")
-        {
-          point(i*delta+p, j*delta+p, context, "grey")
-        }
-        else if (val == "C1")
-        {
-          point(i*delta+p, j*delta+p, context, "yellow")
-        }
-        else if (val == "C2")
-        {
-          point(i*delta+p, j*delta+p, context, "green")
-        }
-      }
+    if(allData.clear) {
+      context.clearRect(0, 0, bw, bh);
+      location.reload();
     }
 
     var varCycles = allData.allCyclesToDraw;
@@ -183,7 +177,7 @@ app.service("FieldService", function($q, $timeout) {
   };
 
   var startListener = function() {
-    socket.stomp.subscribe(service.CHAT_TOPIC, function(data) {
+    socket.stomp.subscribe(service.GAME_TOPIC, function(data) {
       // listener.notify(globalHandler(data.body));
       globalHandler(data.body);
     });
@@ -200,21 +194,6 @@ app.service("FieldService", function($q, $timeout) {
   return service;
 });
 
-app.controller("ChatCtrl", function($scope, FieldService) {
-  $scope.messages = [];
-  $scope.message = "";
-  $scope.max = 140;
-
-  $scope.addMessage = function() {
-    FieldService.send($scope.message);
-    $scope.message = "";
-  };
-
-  FieldService.receive().then(null, null, function(message) {
-    $scope.messages.push(message);
-  });
-});
-
 app.controller('myCtrl', function ($scope, FieldService) {
 
   $scope.context = $('#canvas')[0].getContext("2d");
@@ -224,7 +203,7 @@ app.controller('myCtrl', function ($scope, FieldService) {
     if(isClickOnPoint(e.clientX, e.clientY, $scope.context)) {
       xn=Math.floor((e.clientX+r)/delta);
       yn=Math.floor((e.clientY+r)/delta);
-      FieldService.send(xn,yn, user);
+      FieldService.send(["SET_DOT", "GET_FIELD_STATE", "GET_SCORE"], "player", xn,yn, user);
     }
   };
   $scope.drawBoard = function () {
@@ -246,13 +225,17 @@ app.controller('myCtrl', function ($scope, FieldService) {
   };
 });
 
-app.controller('btnController', function ($scope) {
+app.controller('btnController', function ($scope, FieldService) {
   $scope.ButtonClick = function (string) {
     if(string == "Finish")
     {
       $scope.Message="The game is over!";
-      isFinish=true;
-
+      FieldService.send(["GET_SCORE","FINISH_GAME", "GET_FIELD_STATE"]);
+    }
+    if(string == "New game")
+    {
+      $scope.Message="New game start!";
+      FieldService.send(["NEW_GAME", "GET_SCORE", "GET_FIELD_STATE"]);
     }
     else {
       user = string;
