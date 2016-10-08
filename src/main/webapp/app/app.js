@@ -99,7 +99,7 @@ app.service("FieldService", function($q, $timeout) {
   };
 
   service.RECONNECT_TIMEOUT = 30000;
-  service.SOCKET_URL = "/spring-ng-dots/dots";
+  service.SOCKET_URL = "/dots";
   service.GAME_TOPIC = "/field/action";
   service.GAME_BROKER = "/app/dots";
 

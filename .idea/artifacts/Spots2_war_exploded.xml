@@ -20,6 +20,8 @@
           <element id="library" level="project" name="Maven: org.springframework:spring-web:4.1.1.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-websocket:4.1.1.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-messaging:4.1.1.RELEASE" />
+          <element id="library" level="project" name="Maven: javax.websocket:javax.websocket-api:1.0" />
+          <element id="library" level="project" name="Maven: javax.servlet:javax.servlet-api:3.1.0" />
           <element id="library" level="project" name="Maven: javax.servlet:jstl:1.2" />
           <element id="library" level="project" name="Maven: ch.qos.logback:logback-classic:1.1.2" />
           <element id="library" level="project" name="Maven: ch.qos.logback:logback-core:1.1.2" />
@@ -31,6 +33,9 @@
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.3.3" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.jaxrs:jackson-jaxrs-base:2.3.3" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.3.3" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat.embed:tomcat-embed-websocket:8.5.5" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat.embed:tomcat-embed-core:8.5.5" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-websocket-api:8.5.5" />
         </element>
       </element>
       <element id="directory" name="META-INF">
