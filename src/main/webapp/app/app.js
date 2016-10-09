@@ -174,6 +174,9 @@ app.service("FieldService", function($q, $timeout) {
     var score = $('#score')[0];
     score.textContent=allData.scorePlayer1 + " : " + allData.scorePlayer2;
 
+    var activePlayer = $('#activePlayerId')[0];
+    activePlayer.textContent= "The " + allData.activePlayer + " is making move. Be patient!" ;
+
   };
 
   var startListener = function() {
@@ -203,7 +206,7 @@ app.controller('myCtrl', function ($scope, FieldService) {
     if(isClickOnPoint(e.clientX, e.clientY, $scope.context)) {
       xn=Math.floor((e.clientX+r)/delta);
       yn=Math.floor((e.clientY+r)/delta);
-      FieldService.send(["SET_DOT", "GET_FIELD_STATE", "GET_SCORE"], "player", xn,yn, user);
+      FieldService.send(["SET_DOT", "GET_FIELD_STATE", "GET_SCORE", "GET_ACTIVE_PLAYER"], "player", xn,yn, user);
     }
   };
   $scope.drawBoard = function () {
@@ -240,7 +243,7 @@ app.controller('btnController', function ($scope, FieldService) {
     else {
       user = string;
       setColor(string);
-      $scope.Message = "Button clicked!";
+      $scope.Message = "You are " + user;
       $scope.Color = "Your color is " + getColor(string);
     }
 }});

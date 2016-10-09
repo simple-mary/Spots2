@@ -1,19 +1,22 @@
 package com.marina.spots;
 
+import com.google.common.base.Stopwatch;
+
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Marry on 20.09.2016.
  */
-public class WideSearchAlgorithm {
+public class DeepSearchAlgorithm {
 
-    final Deque<Dot> queue = new LinkedList<Dot>();
+    private final Deque<Dot> queue = new LinkedList<Dot>();
+    private Stopwatch stopwatch = Stopwatch.createStarted();
+    private boolean isCycleFound = false;
 
     public boolean isCycleFound() {
         return isCycleFound;
     }
-
-    private boolean isCycleFound = false;
 
     public Deque<Dot> getQueue() {
         return queue;
@@ -64,6 +67,7 @@ public class WideSearchAlgorithm {
     }
 
     public void dfs(ArrayList<Dot> peaksOfUser, Dot dot, Dot goalDot) {
+        System.out.println("new dfs cycle "+ stopwatch.elapsed(TimeUnit.MILLISECONDS) + "ms.");
         if (dot.isVisited() && dot.equals(goalDot)) {
             if (getQueue().size() > 3) {
                 isCycleFound = true;
@@ -91,7 +95,7 @@ public class WideSearchAlgorithm {
 
         if (!isCycleFound && dot.isNeighbour(goalDot)) {
             if (getQueue().size() > 3) {
-                System.out.println("!!!!We have find chain!!! " + getQueue().toString());
+                System.out.println("!!!!We have find chain!!! " + getQueue().toString() + " Time = "+stopwatch.elapsed(TimeUnit.SECONDS));
                 isCycleFound = true;
             }
             if (!isCycleFound && !queue.isEmpty()) {

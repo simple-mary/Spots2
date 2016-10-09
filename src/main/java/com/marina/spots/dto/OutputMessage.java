@@ -16,8 +16,17 @@ public class OutputMessage extends DotDTO {
 	private int scorePlayer1;
 	private boolean finish;
     private boolean clear;
+	private String activePlayer;
 
-    public boolean isClear() {
+	public String getActivePlayer() {
+		return activePlayer;
+	}
+
+	public void setActivePlayer(String activePlayer) {
+		this.activePlayer = activePlayer;
+	}
+
+	public boolean isClear() {
         return clear;
     }
 

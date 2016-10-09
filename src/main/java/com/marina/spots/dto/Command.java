@@ -8,6 +8,7 @@ public enum Command {
     FINISH_GAME,
     GET_FIELD_STATE,
     GET_SCORE,
-    NEW_GAME;
+    NEW_GAME,
+    GET_ACTIVE_PLAYER;
 
 }

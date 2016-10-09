@@ -13,6 +13,11 @@ import java.util.*;
 public class Game {
 
     public int fieldSize = 15;
+    private String activePlayer = "PLAYER1";
+
+    public String getActivePlayer() {
+        return activePlayer;
+    }
 
     public GameField getField() {
         return field;
@@ -25,6 +30,7 @@ public class Game {
     public void init() {
         field.initializeField();
         globalListWithAllFoundCycle.clear();
+        activePlayer = "PLAYER1";
     }
 
     public List<Queue<Dot>> game(DotDTO dotDto) {
@@ -37,10 +43,13 @@ public class Game {
             Queue<Dot> uniqueCycle = field.paintAllCyclesAndReturnUnique(cycles);
             globalListWithAllFoundCycle.add(uniqueCycle);
         }
+//        activePlayer = dotDto.getDotValues().equals(DotValues.PLAYER1)
+//                ? DotValues.PLAYER2.name() : DotValues.PLAYER1.name();
         return globalListWithAllFoundCycle;
     }
 
     private ArrayList<Queue<Dot>> findAllCycles(String player, Dot dot) {
+
         Collection<Dot> uniqueDots = new HashSet<>(field.getUserDots(dot.getDotValues()));
         uniqueDots.remove(dot);
         uniqueDots.add(dot);
@@ -48,8 +57,10 @@ public class Game {
         Collections.sort(dots);
         ArrayList<Queue<Dot>> cycles = new ArrayList<Queue<Dot>>();
         dot.clear(dots);
-        WideSearchAlgorithm algorithm = new WideSearchAlgorithm();
-        algorithm.dfs(dots, dot, dot);
+        DeepSearchAlgorithm algorithm = new DeepSearchAlgorithm();
+        if (algorithm.getAllNeighbours(dots, dot).size() > 1) {
+            algorithm.dfs(dots, dot, dot);
+        }
         if (algorithm.isCycleFound()) {
             cycles.add(algorithm.getQueue());
         }

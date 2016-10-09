@@ -33,15 +33,15 @@ public class MessageController {
 
     @MessageMapping("/dots")
     @SendTo("/field/action")
-    public OutputMessage sendMessage(InputMessage inputMessage
-                                     /*, Session session, @PathParam("client-id") String clientId*/) {
+    public OutputMessage sendMessage(InputMessage inputMessage) {
         OutputMessage outputMessage = new OutputMessage();
         for (Command command : inputMessage.getManageCommands()) {
             switch (command) {
                 case SET_DOT:
                     outputMessage.setFree(DotValues.FREE.equals(game.getField()
                             .fieldPoints[inputMessage.getDotDTO().getX()][inputMessage.getDotDTO().getY()]));
-                    if (outputMessage.isFree()) {
+                    if (outputMessage.isFree()
+                            && inputMessage.getDotDTO().getDotValues().name().equals(game.getActivePlayer())) {
                         List<Queue<Dot>> cycles = game.game(inputMessage.getDotDTO());
                         outputMessage.setAllCyclesToDraw(cycles);
                     }
@@ -61,6 +61,9 @@ public class MessageController {
                 case NEW_GAME:
                     game.init();
                     outputMessage.setClear(true);
+                    break;
+                case GET_ACTIVE_PLAYER:
+                    outputMessage.setActivePlayer(game.getActivePlayer());
                     break;
                 default:
                     throw new IllegalArgumentException("No such command " + command);
