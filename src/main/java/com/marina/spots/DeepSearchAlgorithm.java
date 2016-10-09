@@ -1,6 +1,7 @@
 package com.marina.spots;
 
 import com.google.common.base.Stopwatch;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -10,6 +11,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class DeepSearchAlgorithm {
 
+    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(DeepSearchAlgorithm.class);
     private final Deque<Dot> queue = new LinkedList<Dot>();
     private Stopwatch stopwatch = Stopwatch.createStarted();
     private boolean isCycleFound = false;
@@ -67,7 +69,7 @@ public class DeepSearchAlgorithm {
     }
 
     public void dfs(ArrayList<Dot> peaksOfUser, Dot dot, Dot goalDot) {
-        System.out.println("new dfs cycle "+ stopwatch.elapsed(TimeUnit.MILLISECONDS) + "ms.");
+        LOG.info("New dfs cycle {} ms.", stopwatch.elapsed(TimeUnit.MILLISECONDS));
         if (dot.isVisited() && dot.equals(goalDot)) {
             if (getQueue().size() > 3) {
                 isCycleFound = true;
@@ -95,7 +97,7 @@ public class DeepSearchAlgorithm {
 
         if (!isCycleFound && dot.isNeighbour(goalDot)) {
             if (getQueue().size() > 3) {
-                System.out.println("!!!!We have find chain!!! " + getQueue().toString() + " Time = "+stopwatch.elapsed(TimeUnit.SECONDS));
+                LOG.info("We have find chain:  {}  Time = {}", getQueue(), stopwatch.elapsed(TimeUnit.SECONDS));
                 isCycleFound = true;
             }
             if (!isCycleFound && !queue.isEmpty()) {

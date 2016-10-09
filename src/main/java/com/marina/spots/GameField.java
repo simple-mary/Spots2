@@ -2,6 +2,7 @@ package com.marina.spots;
 
 import com.google.common.collect.Sets;
 import com.marina.spots.dto.DotDTO;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -10,6 +11,7 @@ import java.util.*;
  */
 public class GameField {
 
+    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(GameField.class);
     private int fieldSize;
     public DotValues[][] fieldPoints;
 
@@ -25,7 +27,7 @@ public class GameField {
         this.setFieldSize(fieldSize);
     }
 
-    Comparator<Queue> queueSizeComparator = new Comparator<Queue>() {
+    private Comparator<Queue> queueSizeComparator = new Comparator<Queue>() {
         @Override
         public int compare(Queue o1, Queue o2) {
             return Integer.compare(o1.size(), o2.size());
@@ -137,7 +139,7 @@ public class GameField {
     public Queue<Dot> paintAllCyclesAndReturnUnique(ArrayList<Queue<Dot>> arrayList) {
         ArrayList<Queue<Dot>> cuted = getUniqueCycles(arrayList);
         for (Queue<Dot> p : cuted) {
-            System.out.println("start new cycle" + p);
+           LOG.info("Start new cycle {} ", p);
             paintArea(p);
         }
         return findMaxLengthCycle(cuted);
@@ -207,17 +209,6 @@ public class GameField {
             }
         }
         return result;
-    }
-
-    public boolean isEmptyFields() {
-        for (DotValues[] fieldPoint : fieldPoints) {
-            for (DotValues values : fieldPoint) {
-                if (values.equals(DotValues.FREE)) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     public int countEmptyFields() {

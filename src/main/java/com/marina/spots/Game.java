@@ -34,21 +34,19 @@ public class Game {
     }
 
     public List<Queue<Dot>> game(DotDTO dotDto) {
-        String user = dotDto.getDotValues().getValue();
         field.setSpot(dotDto);
-        ArrayList<Queue<Dot>> cycles = findAllCycles(user, new Dot(dotDto));
+        ArrayList<Queue<Dot>> cycles = findAllCycles(new Dot(dotDto));
         if (!cycles.isEmpty()) {
             field.printField();
-            System.out.println(cycles.toString());
             Queue<Dot> uniqueCycle = field.paintAllCyclesAndReturnUnique(cycles);
             globalListWithAllFoundCycle.add(uniqueCycle);
         }
-//        activePlayer = dotDto.getDotValues().equals(DotValues.PLAYER1)
-//                ? DotValues.PLAYER2.name() : DotValues.PLAYER1.name();
+        activePlayer = dotDto.getDotValues().equals(DotValues.PLAYER1)
+                ? DotValues.PLAYER2.name() : DotValues.PLAYER1.name();
         return globalListWithAllFoundCycle;
     }
 
-    private ArrayList<Queue<Dot>> findAllCycles(String player, Dot dot) {
+    private ArrayList<Queue<Dot>> findAllCycles(Dot dot) {
 
         Collection<Dot> uniqueDots = new HashSet<>(field.getUserDots(dot.getDotValues()));
         uniqueDots.remove(dot);
